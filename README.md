@@ -1,4 +1,4 @@
-## ReciPeasy
+## ingredia
 
 ### Overview
 Allow users and guests to input ingredients they currently have - either manually or with image/barcode recognition, and view a list of possible recipes they can whip up. 
