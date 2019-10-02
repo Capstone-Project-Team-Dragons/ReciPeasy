@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ReciPeasy",
-    "slug": "ReciPeasy",
+    "name": "ingredia",
+    "slug": "ingredia",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
