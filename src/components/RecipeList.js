@@ -7,17 +7,23 @@ import {
     TouchableOpacity 
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
+import RecipeDetail from './RecipeDetail';
 
-const RecipeList = ({ allRecipes }) => {
+const RecipeList = ({ allRecipes, navigation }) => {
+    // if(!allRecipes) {
+    //     return null;
+    // }
 
     return (
         <View>
             <FlatList
                 data={allRecipes}
-                keyExtractor={(singleRecipe) => singleRecipe}
+                keyExtractor={(singleRecipe) => String(singleRecipe.id)}
                 renderItem={({ item }) =>{
                     return (
-                        <Text key={item.id}>{item.title} - {item.id}</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('SingleRecipe', {recipe: item})}>
+                            <RecipeDetail recipe = {item}/>
+                        </TouchableOpacity>
                     )
                 }}
             />
@@ -25,5 +31,5 @@ const RecipeList = ({ allRecipes }) => {
     )
 }
 
-export default RecipeList;
+export default withNavigation(RecipeList);
 
