@@ -6,13 +6,14 @@ import {
     FlatList
 } from 'react-native';
 import SearchBar from '../components/SearchBar';
-import spoonacular from '../api/spoonacular'
+import spoonacular from '../api/spoonacular';
+// import { BarCodeScanner } from 'expo-barcode-scanner';
 import data from '../components/data';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler'; 
 import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
 
-const SearchIngredientsScreen = ({ navigation }) => {
+const SearchIngredientsScreen = () => {
     const [ingredients, setIngredients] = useState([]);
     const [currIngredient, setCurrIngredient] = useState('');
     const [recipes, setRecipes] = useState([]);

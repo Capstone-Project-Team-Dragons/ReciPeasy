@@ -1,7 +1,10 @@
 import React from 'react';
 import {View, TextInput, StyleSheet, ScrollView} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler'; 
+import { Feather } from '@expo/vector-icons';
+import { withNavigation } from 'react-navigation';
 
-const SearchBar = ({ currIngredient, onTermChange, onTermSubmit }) => {
+const SearchBar = ({ currIngredient, onTermChange, onTermSubmit, navigation }) => {
     return (
         <View style={styles.searchBar}>
             <TextInput 
@@ -12,6 +15,9 @@ const SearchBar = ({ currIngredient, onTermChange, onTermSubmit }) => {
                 onChangeText={(newIngred) => onTermChange(newIngred)}
                 onEndEditing={() => onTermSubmit()}
             />
+            <TouchableOpacity onPress={() => navigation.navigate('BarcodeScanner')}>
+                <Feather name='camera' size={20} style={styles.iconStyle}/>
+            </TouchableOpacity>
         </View>
     )
 
@@ -30,7 +36,12 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         fontSize: 18
+    },
+    iconStyle: {
+        fontSize: 35,
+        alignSelf: 'center',
+        marginHorizontal: 15
     }
 })
 
-export default SearchBar;
+export default withNavigation(SearchBar);
