@@ -7,40 +7,48 @@ import {
 } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import spoonacular from '../api/spoonacular'
+import data from '../components/data';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler'; 
 import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
 
-const SearchIngredientsScreen = () => {
+const SearchIngredientsScreen = ({ navigation }) => {
     const [ingredients, setIngredients] = useState([]);
     const [currIngredient, setCurrIngredient] = useState('');
     const [recipes, setRecipes] = useState([]);
 
-    const submitHandler = ()=> {
-        setIngredients([...ingredients, currIngredient]);
-        setCurrIngredient('');
-    }
-
-    const searchRecipesApi = async () => {
+    const searchRecipesApi = async (ingreds) => {
         console.log('API: ', SPOON_API)
         try {
-            const {data} = await spoonacular.get(`/findByIngredients?apiKey=${SPOON_API}`, {
-                params: {
-                    ingredients: ingredients.join(),
-                    number: 15,
-                    ranking: 2,
-                    ignorePantry: true
-                }
-            });
+            // const {data} = await spoonacular.get(`/findByIngredients?apiKey=${SPOON_API}`, {
+            //     params: {
+            //         ingredients: ingreds.join(),
+            //         number: 15,
+            //         ranking: 2,
+            //         ignorePantry: true
+            //     }
+            // });
             setRecipes(data);
         } catch (error) {
             console.log('Error! ', error)
         }
     }
 
+    const submitHandler = () => {
+        if(ingredients.includes(currIngredient.toLowerCase())) {
+            console.log('Ingredient already exists ', currIngredient)
+            setCurrIngredient('');            
+        } else {
+            setIngredients([...ingredients, currIngredient.toLowerCase()]);
+            setCurrIngredient('');
+        }
+    }
+
+
     //Call searchYelpApi when component is first rendered
     //useEffect hook that passes a function that we want to run only once, 
     //or depending on if the values in the array change
+    
     useEffect(() => {
         searchRecipesApi(['apples', 'flour', 'sugar']);
     }, []);
@@ -57,9 +65,9 @@ const SearchIngredientsScreen = () => {
                 data={ingredients}
                 style={styles.displayList}
                 keyExtractor={(ingredient) => ingredient}
-                renderItem={({ item, index }) => {
+                renderItem={({ item }) => {
                     return (
-                        <Text key={index}>{item} - {index}</Text>
+                        <Text>{item}</Text>
                     )
                 }}
             /> 
@@ -71,7 +79,9 @@ const SearchIngredientsScreen = () => {
                 <Text style={styles.buttonText}>Find Recipes</Text>
             </TouchableOpacity>
             <ScrollView>
-                <RecipeList allRecipes={recipes}/>
+                {
+                    recipes.length > 0 ? <RecipeList allRecipes={recipes}/> : null
+                }
             </ScrollView>
         </View>
     )
