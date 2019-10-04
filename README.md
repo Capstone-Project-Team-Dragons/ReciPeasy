@@ -4,13 +4,20 @@
 Allow users and guests to input ingredients they currently have - either manually or with image/barcode recognition, and view a list of possible recipes they can whip up. This will a mobile application (iOS) built with React Native and Firestore.
 
 #### MVP
-• Users can login in with Google or with email
-• Guests have the option of signing up
-• Guests can use the application but can not save data to Past Recipes or Wish List
-• Users and Guests can manually input ingredients they have or scan their products
-• Users and Guests can view a list of recipes filtered by the application
-• Users and Guests can view a specific recipe for more details
-• Users can view recipe history and can add/view recipes to their Wish List
+• Users:
+  • Users can login in with Google or with email
+  • Users can view Past Recipes
+  • Users can add/view recipes to their Wish List
+• Guests
+  • Guests have the option of signing up
+  • Guests CANNOT view Past Recipes
+  • Guests CANNOT add/view recipes to their Wish List
+• Users and Guests:
+  • can manually input ingredients they have or scan their products
+  • can view a list of Recipes found based on those ingredients
+  • can select a Recipe from the displayed list
+  • Users and Guests can view a specific recipe for more details
+
 
 #### Tier 1
 • Login/Logout → OAuth
