@@ -10,6 +10,8 @@ const BarcodeScannerScreen = ({ navigation }) => {
   const [hasCameraPermission, setCameraPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
+  const submitIngredient = navigation.getParam('submit');
+
   const getPermissionsAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     if (status === 'granted') {
@@ -20,6 +22,8 @@ const BarcodeScannerScreen = ({ navigation }) => {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    console.log('submitIngredient', submitIngredient)
+    submitIngredient('Keebler');
     navigation.navigate('Search', {UPC: data});
   };
 
