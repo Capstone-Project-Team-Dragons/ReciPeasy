@@ -13,7 +13,7 @@ import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
 
-const SearchIngredientsScreen = () => {
+const SearchIngredientsScreen = ({ navigation }) => {
     const [ingredients, setIngredients] = useState([]);
     const [currIngredient, setCurrIngredient] = useState('');
     const [recipes, setRecipes] = useState([]);
@@ -35,12 +35,13 @@ const SearchIngredientsScreen = () => {
         }
     }
 
-    const submitHandler = () => {
-        if(ingredients.includes(currIngredient.toLowerCase())) {
-            console.log('Ingredient already exists ', currIngredient)
+    const submitHandler = (cIngredient) => {
+        console.log('here!', cIngredient)
+        if(ingredients.includes(cIngredient.toLowerCase())) {
+            console.log('Ingredient already exists ', cIngredient)
             setCurrIngredient('');            
         } else {
-            setIngredients([...ingredients, currIngredient.toLowerCase()]);
+            setIngredients([...ingredients, cIngredient.toLowerCase()]);
             setCurrIngredient('');
         }
     }
@@ -59,7 +60,8 @@ const SearchIngredientsScreen = () => {
             <SearchBar 
                 currIngredient={currIngredient}
                 onTermChange ={(newIngred) => setCurrIngredient(newIngred) }
-                onTermSubmit= {() => submitHandler()}
+                onTermSubmit= {() => submitHandler(currIngredient)}
+                
             />
             <Text style={styles.header}>Your List of Ingredients: </Text>
             <FlatList 
