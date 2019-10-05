@@ -35,8 +35,8 @@ const SearchIngredientsScreen = ({ navigation }) => {
         }
     }
 
+
     const submitHandler = (cIngredient) => {
-        console.log('here!', cIngredient)
         if(ingredients.includes(cIngredient.toLowerCase())) {
             console.log('Ingredient already exists ', cIngredient)
             setCurrIngredient('');            
@@ -44,6 +44,13 @@ const SearchIngredientsScreen = ({ navigation }) => {
             setIngredients([...ingredients, cIngredient.toLowerCase()]);
             setCurrIngredient('');
         }
+    }
+
+    let dataFromBarcode = navigation.getParam('ingredientName');
+    if (dataFromBarcode && ingredients.includes(dataFromBarcode.toLowerCase())) {
+        console.log('data in if')
+        submitHandler(dataFromBarcode);   
+        // dataFromBarcode= null;
     }
 
 
