@@ -1,10 +1,10 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import * as Permissions from 'expo-permissions';
-
+import { BUYCOTT_API } from 'react-native-dotenv';
+import buycott from '../api/buycott';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { withNavigation } from 'react-navigation';
-
 
 const BarcodeScannerScreen = ({ navigation }) => {
   const [hasCameraPermission, setCameraPermission] = useState(null);
@@ -17,15 +17,36 @@ const BarcodeScannerScreen = ({ navigation }) => {
     }
   };
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  // Search Buycott API to retrieve the product name, for which the user has scanned the barcode.
+  const searchBarcodeApi = async barcode => {
+    try {
+      const { data } = await buycott.get('/', {
+        params: {
+          barcode: barcode,
+          access_token: BUYCOTT_API,
+        },
+      });
+      // If we have a product name,
+      if (data.products[0].product_name) {
+        // Extract the product name.
+        const productName = data.products[0].product_name;
+        // Navigate back to Search screen with the found product name.
+        navigation.navigate('Search', { ingredientName: productName });
+      }
+    } catch (error) {
+      console.log('Error!, ', error);
+    }
+  };
+
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    navigation.navigate('Search', {UPC: data});
+    searchBarcodeApi(data);
+    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
   useEffect(() => {
     getPermissionsAsync();
-  })
+  });
 
   if (hasCameraPermission === null) {
     return <Text>Requesting for camera permission</Text>;
@@ -40,7 +61,8 @@ const BarcodeScannerScreen = ({ navigation }) => {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-      }}>
+      }}
+    >
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
@@ -50,7 +72,7 @@ const BarcodeScannerScreen = ({ navigation }) => {
         <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
       )}
     </View>
-  )
-}
+  );
+};
 
 export default withNavigation(BarcodeScannerScreen);
