@@ -16,7 +16,7 @@ const SearchBar = ({ currIngredient, onTermChange, onTermSubmit, navigation }) =
                 onEndEditing={() => onTermSubmit()}
             />
             <TouchableOpacity onPress={() => navigation.navigate('BarcodeScanner')}>
-                <Feather name='camera' size={20} style={styles.iconStyle}/>
+                <Feather name='camera' size={15} style={styles.iconStyle}/>
             </TouchableOpacity>
         </View>
     )
