@@ -50,7 +50,6 @@ const SearchIngredientsScreen = ({ navigation }) => {
   let dataFromBarcode = navigation.getParam('ingredientName');
   if (dataFromBarcode && !ingredients.includes(dataFromBarcode.toLowerCase())) {
     submitHandler(dataFromBarcode);
-    // dataFromBarcode= null;
   }
 
   //Call searchRecipesApi when component is first rendered
@@ -59,8 +58,6 @@ const SearchIngredientsScreen = ({ navigation }) => {
 
   useEffect(() => {
     searchRecipesApi([]);
-    // For testing purposes,
-    // searchRecipesApi(['apples', 'flour', 'sugar']);
   }, []);
 
   return (
