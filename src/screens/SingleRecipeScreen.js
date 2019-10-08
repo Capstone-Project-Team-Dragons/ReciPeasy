@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, Linking, TouchableOpacity} from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native';
 import { SPOON_API } from 'react-native-dotenv';
 import spoonacular from '../api/spoonacular';
 
 // Recipes Data for testing purpose, saved in json format inside the data.js file.
-//import data from '../components/instructionData';
+// import data from '../testData/instructionData';
 
 
 const SingleRecipeScreen = ({ navigation}) => {
@@ -15,6 +15,7 @@ const SingleRecipeScreen = ({ navigation}) => {
       try {
         const x = `/${id}/analyzedInstructions?apiKey=${SPOON_API}`;
         const { data } = await spoonacular.get(x);
+        console.log('Data Instructions', data)
         navigation.navigate('Instruction', { instructions: data });
       } catch (error) {
         console.log('Error! ', error);

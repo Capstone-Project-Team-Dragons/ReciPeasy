@@ -5,7 +5,6 @@ import spoonacular from '../api/spoonacular';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
-import { bundleDirectory } from 'expo-file-system';
 
 // Recipes Data for testing purpose, saved in json format inside the data.js file.
 //import data from '../components/data';
@@ -120,7 +119,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
       <ScrollView>
         {recipes.length > 0 ? <RecipeList allRecipes={recipes} /> : null}
       </ScrollView>
-    </View>
+    </View>  
   );
 };
 
