@@ -5,6 +5,7 @@ import spoonacular from '../api/spoonacular';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
+import { bundleDirectory } from 'expo-file-system';
 
 // Recipes Data for testing purpose, saved in json format inside the data.js file.
 // import data from '../components/data';
@@ -16,6 +17,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
 
   // Search Spoonacular API to retrieve the "Recipes List" (Array).
   const searchRecipesApi = async ingreds => {
+    // If "Ingredients List" has some ingredients,
     if (ingreds.length > 0) {
       try {
         const { data } = await spoonacular.get(
@@ -34,9 +36,13 @@ const SearchIngredientsScreen = ({ navigation }) => {
         console.log('Error! ', error);
       }
     }
+    // Else, if "Ingredients List" is empty, make "Recipes List" empty too.
+    else {
+      setRecipes([]);
+    }
   };
 
-  // A handler when an ingredient is submitted.
+  // A handler when an ingredient is submitted by user, either manually or by scanning barcode.
   const submitHandler = cIngredient => {
     if (ingredients.includes(cIngredient.toLowerCase())) {
       setCurrIngredient('');
@@ -44,6 +50,11 @@ const SearchIngredientsScreen = ({ navigation }) => {
       setIngredients([...ingredients, cIngredient.toLowerCase()]);
       setCurrIngredient('');
     }
+  };
+
+  // A handler when user wants to remove an ingredient from the "Ingredients List" (Array).
+  const removeIngredient = cIngredient => {
+    setIngredients(ingredients.filter(item => item !== cIngredient));
   };
 
   // If user scanned barcode of a product, add the product name to "Ingredients List" (Array).
@@ -55,7 +66,6 @@ const SearchIngredientsScreen = ({ navigation }) => {
   //Call searchRecipesApi when component is first rendered
   //useEffect hook that passes a function that we want to run only once,
   //or depending on if the values in the array change
-
   useEffect(() => {
     searchRecipesApi([]);
   }, []);
@@ -73,7 +83,19 @@ const SearchIngredientsScreen = ({ navigation }) => {
         style={styles.displayList}
         keyExtractor={ingredient => ingredient}
         renderItem={({ item }) => {
-          return <Text>{item}</Text>;
+          return (
+            <View style={styles.ingredientItemContainer}>
+              <Text style={styles.displayItem}>{item}</Text>
+
+              <TouchableOpacity
+                horizontal={true}
+                style={styles.removeIngredientButton}
+                onPress={() => removeIngredient(item)}
+              >
+                <Text style={styles.removeIngredientButtonText}>X</Text>
+              </TouchableOpacity>
+            </View>
+          );
         }}
       />
       <TouchableOpacity
@@ -99,9 +121,22 @@ const styles = StyleSheet.create({
   displayList: {
     marginTop: 5,
     marginLeft: 15,
+    minHeight: 100,
   },
   displayItem: {
     fontSize: 16,
+  },
+  ingredientItemContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  removeIngredientButton: {
+    backgroundColor: '#e0e0e0',
+    marginHorizontal: 10,
+    justifyContent: 'center',
+  },
+  removeIngredientButtonText: {
+    color: 'black',
   },
   searchRecipeButton: {
     backgroundColor: '#66ccff',
