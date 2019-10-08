@@ -14,6 +14,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
   const [ingredients, setIngredients] = useState([]);
   const [currIngredient, setCurrIngredient] = useState('');
   const [recipes, setRecipes] = useState([]);
+  //const [dataFromBarcode, setDataFromBarcode] = useState(null);
 
   // Search Spoonacular API to retrieve the "Recipes List" (Array).
   const searchRecipesApi = async ingreds => {
@@ -44,24 +45,35 @@ const SearchIngredientsScreen = ({ navigation }) => {
 
   // A handler when an ingredient is submitted by user, either manually or by scanning barcode.
   const submitHandler = cIngredient => {
-    if (ingredients.includes(cIngredient.toLowerCase())) {
-      setCurrIngredient('');
-    } else {
-      setIngredients([...ingredients, cIngredient.toLowerCase()]);
-      setCurrIngredient('');
+    let currItem = cIngredient.trim().toLowerCase();
+    if (currItem.length > 0) {
+      if (ingredients.includes(currItem)) {
+        setCurrIngredient('');
+      } else {
+        setIngredients([...ingredients, currItem]);
+        setCurrIngredient('');
+      }
     }
-  };
-
-  // A handler when user wants to remove an ingredient from the "Ingredients List" (Array).
-  const removeIngredient = cIngredient => {
-    setIngredients(ingredients.filter(item => item !== cIngredient));
   };
 
   // If user scanned barcode of a product, add the product name to "Ingredients List" (Array).
   let dataFromBarcode = navigation.getParam('ingredientName');
-  if (dataFromBarcode && !ingredients.includes(dataFromBarcode.toLowerCase())) {
-    submitHandler(dataFromBarcode);
+
+  if (dataFromBarcode !== null) {
+    if (
+      dataFromBarcode &&
+      !ingredients.includes(dataFromBarcode.toLowerCase())
+    ) {
+      submitHandler(dataFromBarcode);
+    }
   }
+
+  // A handler when user wants to remove an ingredient from the "Ingredients List" (Array).
+  const removeIngredient = cIngredient => {
+    const indexOfItem = ingredients.indexOf(cIngredient);
+    setIngredients(ingredients.filter((item, index) => index !== indexOfItem));
+    navigation.setParams({ ingredientName: null });
+  };
 
   //Call searchRecipesApi when component is first rendered
   //useEffect hook that passes a function that we want to run only once,
