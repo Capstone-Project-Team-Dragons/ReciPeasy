@@ -26,10 +26,11 @@ const BarcodeScannerScreen = ({ navigation }) => {
           access_token: BUYCOTT_API,
         },
       });
+      let productName = null;
       // If we have a product name,
       if (data.products[0].product_name) {
         // Extract the product name.
-        const productName = data.products[0].product_name;
+        productName = data.products[0].product_name;
         // Navigate back to Search screen with the found product name.
         navigation.navigate('Search', { ingredientName: productName });
       }
