@@ -8,7 +8,7 @@ import RecipeList from '../components/RecipeList';
 import { bundleDirectory } from 'expo-file-system';
 
 // Recipes Data for testing purpose, saved in json format inside the data.js file.
-// import data from '../components/data';
+//import data from '../components/data';
 
 const SearchIngredientsScreen = ({ navigation }) => {
   const [ingredients, setIngredients] = useState([]);
