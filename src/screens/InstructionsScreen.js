@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import InstructionList from '../components/InstructionList';
 
 const InstructionScreen = ({ navigation}) => {
-    const instructions = navigation.getParam('instructions');
     const addtionalInfo = navigation.getParam('addtionalInfo');
     return (
         <View style={styles.container}>
@@ -14,7 +13,7 @@ const InstructionScreen = ({ navigation}) => {
                  <Text style={styles.textAddtional}>Servings: {addtionalInfo["servings"]}</Text>
             </View>
             <FlatList
-                    data={instructions}
+                    data={addtionalInfo["analyzedInstructions"]}
                     keyExtractor={(item, index) => 'key2'+index}
                     renderItem={({ item, index }) => {
                           return ( <InstructionList allInstructions={item} /> );

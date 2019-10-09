@@ -11,11 +11,11 @@ const SingleRecipeScreen = ({ navigation}) => {
     const recipe = navigation.getParam('recipe');
     
     const searchInstructionAndAddi = async (id) => {
-        let url = `/${id}/analyzedInstructions?apiKey=${SPOON_API}`;
-        const instructionsData = await searchInstructionApi(url);
-            url = `/${id}/information?apiKey=${SPOON_API}`;
+        //let url = `/${id}/analyzedInstructions?apiKey=${SPOON_API}`;
+        //const instructionsData = await searchInstructionApi(url);
+        let url = `/${id}/information?apiKey=${SPOON_API}`;
         const addtionalInfoData = await searchInstructionApi(url);
-        navigation.navigate('Instruction', { instructions: instructionsData, addtionalInfo: addtionalInfoData });
+        navigation.navigate('Instruction', { addtionalInfo: addtionalInfoData });
     }
 
     const searchInstructionApi = async (url) => {
