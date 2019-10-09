@@ -7,13 +7,12 @@ import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
 
 // Recipes Data for testing purpose, saved in json format inside the data.js file.
-//import data from '../components/data';
+// import data from '../testData/recipeData';
 
 const SearchIngredientsScreen = ({ navigation }) => {
   const [ingredients, setIngredients] = useState([]);
   const [currIngredient, setCurrIngredient] = useState('');
   const [recipes, setRecipes] = useState([]);
-  //const [dataFromBarcode, setDataFromBarcode] = useState(null);
 
   // Search Spoonacular API to retrieve the "Recipes List" (Array).
   const searchRecipesApi = async ingreds => {
@@ -74,6 +73,13 @@ const SearchIngredientsScreen = ({ navigation }) => {
     navigation.setParams({ ingredientName: null });
   };
 
+  // A handler when user wants to "Clear Search Results".
+  const clearSearchResults = () => {
+    // Make both "Ingredients List" and "Recipes List" empty.
+    setIngredients([]);
+    setRecipes([]);
+  };
+
   //Call searchRecipesApi when component is first rendered
   //useEffect hook that passes a function that we want to run only once,
   //or depending on if the values in the array change
@@ -88,6 +94,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
         onTermChange={newIngred => setCurrIngredient(newIngred)}
         onTermSubmit={() => submitHandler(currIngredient)}
       />
+
       <Text style={styles.header}>Your List of Ingredients: </Text>
       <FlatList
         data={ingredients}
@@ -109,6 +116,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
           );
         }}
       />
+
       <TouchableOpacity
         horizontal={true}
         style={styles.searchRecipeButton}
@@ -116,10 +124,23 @@ const SearchIngredientsScreen = ({ navigation }) => {
       >
         <Text style={styles.buttonText}>Find Recipes</Text>
       </TouchableOpacity>
-      <ScrollView>
-        {recipes.length > 0 ? <RecipeList allRecipes={recipes} /> : null}
-      </ScrollView>
-    </View>  
+      {recipes.length > 0 ? (
+        <View>
+          <TouchableOpacity
+            horizontal={true}
+            style={styles.clearSearchResultsButton}
+            onPress={() => clearSearchResults()}
+          >
+            <Text style={styles.clearSearchResultsButtonText}>
+              Clear Search Results
+            </Text>
+          </TouchableOpacity>
+          <ScrollView>
+            <RecipeList allRecipes={recipes} />
+          </ScrollView>
+        </View>
+      ) : null}
+    </View>
   );
 };
 
@@ -164,6 +185,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
+  },
+  clearSearchResultsButton: {
+    backgroundColor: '#c8edff',
+    marginHorizontal: 100,
+    marginTop: 10,
+    marginBottom: 10,
+    height: 25,
+    justifyContent: 'center',
+  },
+  clearSearchResultsButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'grey',
+    textAlign: 'center',
   },
 });
 
