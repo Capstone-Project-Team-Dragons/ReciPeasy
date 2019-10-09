@@ -16,6 +16,7 @@ firebase.initializeApp(config);
 
 export default class Login extends React.Component {
   state = { email: '', password: '', errorMessage: null };
+  
   handleLogin = () => {
     // TODO: Firebase stuff...
     // console.log('handleLogin')
@@ -30,6 +31,21 @@ export default class Login extends React.Component {
       console.log(error.toString(error));
     }
   };
+
+  handleSignUp = () => {
+    try {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then(user => { 
+          console.log(user);
+          this.props.navigation.navigate('MyRecipes', {userInfo: user})
+        });
+    } catch(error) {
+      console.log('Error ', error)
+    }
+
+}
 
   render() {
     return (
@@ -54,10 +70,7 @@ export default class Login extends React.Component {
           value={this.state.password}
         />
         <Button title="Login" onPress={this.handleLogin} />
-        <Button
-          title="Don't have an account? Sign Up"
-          onPress={() => this.props.navigation.navigate('SignUp')}
-        />
+        <Button title="Sign-Up" onPress={this.handleSignUp} />
       </View>
     );
   }
