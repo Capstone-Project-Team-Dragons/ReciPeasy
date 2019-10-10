@@ -1,33 +1,25 @@
 import React from 'react';
 import * as firebase from 'firebase';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
-import { FIREBASE_API } from 'react-native-dotenv';
-
-var config = {
-  apiKey: `${FIREBASE_API}`,
-  authDomain: 'ingredia-dc183.firebaseapp.com',
-  databaseURL: 'https://ingredia-dc183.firebaseapp.com',
-  projectId: 'ingredia-dc183',
-  storageBucket: 'ingredia-dc183.appspot.com',
-  messagingSenderId: '1083112709962',
-};
-
-firebase.initializeApp(config);
+import db from '../api/db/database';
 
 export default class Login extends React.Component {
-  state = { email: '', password: '', errorMessage: null };
-  
+  constructor(props) {
+    super(props);
+    this.state = { email: '', password: '', errorMessage: null };
+  }
+
   handleLogin = () => {
-    // TODO: Firebase stuff...
-    // console.log('handleLogin')
     try {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(res => {
-          console.log(res.user.email);
+          this.props.navigation.navigate('MyRecipes', { userId: res.user.uid });
         });
     } catch (error) {
+      const errorMessage = error.message;
+      alert(errorMessage);
       console.log(error.toString(error));
     }
   };
@@ -37,22 +29,23 @@ export default class Login extends React.Component {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then(user => { 
-          console.log(user);
-          this.props.navigation.navigate('MyRecipes', {userInfo: user})
+        .then(res => {
+          db.collection('users')
+            .doc(`${res.user.uid}`)
+            .set({ email: `${res.user.email}` });
+          this.props.navigation.navigate('MyRecipes', { userId: res.user.uid });
         });
-    } catch(error) {
-      console.log('Error ', error)
+    } catch (error) {
+      this.setState({ errorMessage: error.message });
     }
-
-}
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <Text>Login</Text>
         {this.state.errorMessage && (
-          <Text style={{ color: 'red' }}>{this.state.errorMessage}</Text>
+          <Text style={{ color: 'blue' }}>{this.state.errorMessage}</Text>
         )}
         <TextInput
           style={styles.textInput}
