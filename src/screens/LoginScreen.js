@@ -6,7 +6,11 @@ import db from '../api/db/database';
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '', errorMessage: null };
+    this.state = {
+       email: '', 
+       password: '', 
+       errorMessage: null 
+    };
   }
 
   handleLogin = () => {
@@ -33,6 +37,11 @@ export default class Login extends React.Component {
           db.collection('users')
             .doc(`${res.user.uid}`)
             .set({ email: `${res.user.email}` });
+          db.collection('users')
+            .doc(`${res.user.uid}`)
+            .collection('pastRecipes')
+            .doc('recipe0')
+            .set({ recipeId: 0 });
           this.props.navigation.navigate('MyRecipes', { userId: res.user.uid });
         });
     } catch (error) {
