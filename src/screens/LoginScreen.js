@@ -2,15 +2,19 @@ import React from 'react';
 import * as firebase from 'firebase';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import db from '../api/db/database';
+import { connect } from 'react-redux';
+import { updateCurrentUser } from '../store/actionCreators';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       email: '', 
-       password: '', 
-       errorMessage: null 
+      email: '',
+      password: '',
+      errorMessage: null,
     };
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
   }
 
   handleLogin = () => {
@@ -19,7 +23,8 @@ export default class Login extends React.Component {
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(res => {
-          this.props.navigation.navigate('MyRecipes', { userId: res.user.uid });
+          this.props.updateCurrentUser(res.user.uid, 'loggedIn');
+          this.props.navigation.navigate('MyRecipes');
         });
     } catch (error) {
       const errorMessage = error.message;
@@ -42,7 +47,8 @@ export default class Login extends React.Component {
             .collection('pastRecipes')
             .doc('recipe0')
             .set({ recipeId: 0 });
-          this.props.navigation.navigate('MyRecipes', { userId: res.user.uid });
+          this.props.updateCurrentUser(res.user.uid, 'loggedIn');
+          this.props.navigation.navigate('MyRecipes');
         });
     } catch (error) {
       this.setState({ errorMessage: error.message });
@@ -77,6 +83,18 @@ export default class Login extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return { currentUserId: state.currentUserId };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateCurrentUser: (userId, status) =>
+      dispatch(updateCurrentUser(userId, status)),
+  };
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -91,3 +109,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 });
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);
