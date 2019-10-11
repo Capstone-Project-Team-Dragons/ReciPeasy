@@ -5,22 +5,27 @@ import spoonacular from '../api/spoonacular';
 
 // Recipes Data for testing purpose, saved in json format inside the data.js file.
 // import data from '../testData/instructionData';
-
+// import data2 from '../testData/recipeAdditionalData';
 
 const SingleRecipeScreen = ({ navigation}) => {
     const recipe = navigation.getParam('recipe');
     
-    // Search Spoonacular API to retrieve the "Instructions" for each recipe (Array).
-    const searchInstructionApi = async id => {
-      try {
-        const x = `/${id}/analyzedInstructions?apiKey=${SPOON_API}`;
-        const { data } = await spoonacular.get(x);
-        console.log('Data Instructions', data)
-        navigation.navigate('Instruction', { instructions: data });
-      } catch (error) {
-        console.log('Error! ', error);
+    const searchInstructionAndAddi = async (id) => {
+        //let url = `/${id}/analyzedInstructions?apiKey=${SPOON_API}`;
+        //const instructionsData = await searchInstructionApi(url);
+        let url = `/${id}/information?apiKey=${SPOON_API}`;
+        const addtionalInfoData = await searchInstructionApi(url);
+        navigation.navigate('Instruction', { addtionalInfo: addtionalInfoData });
     }
-  };
+
+    const searchInstructionApi = async (url) => {
+      try {
+          const { data } = await spoonacular.get(url);
+          return data;
+       } catch (error) {
+        console.log('Error! ', error);
+       }
+    };
 
     return (
         <View style={styles.container}>
@@ -41,18 +46,13 @@ const SingleRecipeScreen = ({ navigation}) => {
                         }} 
             />
 
-
             <TouchableOpacity
                     horizontal={true}
                     style={styles.searchRecipeButton}
-                    onPress={() => searchInstructionApi(recipe.id)}
+                    onPress={() => searchInstructionAndAddi(recipe.id)}
                 >
                 <Text style={styles.buttonText}>Instruction Details</Text>
-                
             </TouchableOpacity> 
-                
-                
-
         </View>
     )
 }
