@@ -3,16 +3,11 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-
 import { SPOON_API } from 'react-native-dotenv';
 import spoonacular from '../api/spoonacular';
 
-// Recipes Data for testing purpose, saved in json format inside the data.js file.
-// import data from '../testData/instructionData';
-// import data2 from '../testData/recipeAdditionalData';
 
 const SingleRecipeScreen = ({ navigation}) => {
     const recipe = navigation.getParam('recipe');
     
     const searchInstructionAndAddi = async (id) => {
-        //let url = `/${id}/analyzedInstructions?apiKey=${SPOON_API}`;
-        //const instructionsData = await searchInstructionApi(url);
         let url = `/${id}/information?apiKey=${SPOON_API}`;
         const addtionalInfoData = await searchInstructionApi(url);
         navigation.navigate('Instruction', { addtionalInfo: addtionalInfoData });
@@ -38,12 +33,14 @@ const SingleRecipeScreen = ({ navigation}) => {
                 style={styles.displayList}
                 keyExtractor={(item, index) => 'key'+index}
                 renderItem={({ item }) => {
-                                return (<View style={styles.container}>
-                                            <Image style={styles.imageIngredientStyle} source={{ uri: item.image }} />
-                                            <Text style={styles.recipeIngredientName}>Name: {item.name}</Text>
-                                            <Text style={styles.recipeIngredientName}>Quantity Need: {item.original}</Text>
-                                        </View>);
-                        }} 
+                    return (
+                        <View style={styles.container}>
+                            <Image style={styles.imageIngredientStyle} source={{ uri: item.image }} />
+                            <Text style={styles.recipeIngredientName}>Name: {item.name}</Text>
+                            <Text style={styles.recipeIngredientName}>Quantity Need: {item.original}</Text>
+                        </View>);
+                    }
+                } 
             />
 
             <TouchableOpacity

@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { SPOON_API } from 'react-native-dotenv';
 
 export default axios.create({
     baseURL: 'https://api.spoonacular.com/recipes',
     headers: {
-        Authorization: 'Bearer df73c947e0484c74b5e11458fe787318'
+        Authorization: `Bearer ${SPOON_API}`
     }
 })

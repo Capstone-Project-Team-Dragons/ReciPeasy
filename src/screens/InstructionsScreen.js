@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import InstructionList from '../components/InstructionList';
+import { addOrientationChangeListener } from 'expo/build/ScreenOrientation/ScreenOrientation';
 
 const InstructionScreen = ({ navigation}) => {
     const addtionalInfo = navigation.getParam('addtionalInfo');
@@ -8,16 +9,17 @@ const InstructionScreen = ({ navigation}) => {
         <View style={styles.container}>
             <Text  style={styles.textTitle}>Instruction Details</Text>
             <View style={styles.addtional}>
-                 <Text style={styles.textAddtional}>Ready In Minutes: { addtionalInfo["readyInMinutes"]}</Text>
-                 <Text style={styles.textAddtional}>Health Score: {addtionalInfo["healthScore"]}</Text>
+                 <Text style={styles.textAddtional}>Prep and Cook Time: { addtionalInfo["readyInMinutes"]}</Text>
                  <Text style={styles.textAddtional}>Servings: {addtionalInfo["servings"]}</Text>
             </View>
             <FlatList
-                    data={addtionalInfo["analyzedInstructions"]}
-                    keyExtractor={(item, index) => 'key2'+index}
-                    renderItem={({ item, index }) => {
-                          return ( <InstructionList allInstructions={item} /> );
-                }} />
+                data={addtionalInfo["analyzedInstructions"]}
+                keyExtractor={(item, index) => 'key2'+index}
+                renderItem={({ item, index }) => {
+                    return ( <InstructionList allInstructions={item} /> );
+                    }
+                }
+            />
         </View>
     )
 }
