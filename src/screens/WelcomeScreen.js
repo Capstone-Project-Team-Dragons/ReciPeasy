@@ -17,7 +17,7 @@ class WelcomeScreen extends React.Component {
           <Text style={styles.welcomeHeaderText}>Welcome to the Ingredia</Text>
         </View>
 
-        {currentUser === undefined || currentUser === {} ? (
+        {currentUser === undefined || !currentUser.id ? (
           <View>
             <TouchableOpacity
               horizontal={true}
