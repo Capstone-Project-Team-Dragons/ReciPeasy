@@ -1,6 +1,11 @@
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
+
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './src/store/index';
+
 import SearchIngredientsScreen from './src/screens/SearchIngredientsScreen';
 import SingleRecipeScreen from './src/screens/SingleRecipeScreen';
 import BarcodeScannerScreen from './src/screens/BarcodeScannerScreen';
@@ -19,34 +24,41 @@ const SearchRecipesStack = createStackNavigator(
   },   
   {
     initialRouteName: 'WelcomeScreen',
-    // defaultNavigationOptions: {
-    //   title: "Welcome to the Ingredia"
-    // }
+    defaultNavigationOptions: {
+       title: "Welcome to the Ingredia"
+     },
   }
 );
 
 const MyRecipesStack = createStackNavigator(
-  { 
+  {
     MyRecipes: MyRecipesScreen,
-    Login: LoginScreen
-  },   
+    Login: LoginScreen,
+  },
   {
     initialRouteName: 'MyRecipes',
     defaultNavigationOptions: {
-      title: "My Recipes"
-    }
+      title: 'My Recipes',
+    },
   }
 );
 
-export default createAppContainer(
+let Navigation = createAppContainer(
   createBottomTabNavigator(
     {
       'Search Recipes': SearchRecipesStack,
       'My Recipes': MyRecipesStack,
-    }, 
-    {
-
-    }
+    },
+    {}
   )
-)
+);
 
+export default class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
+    );
+  }
+}

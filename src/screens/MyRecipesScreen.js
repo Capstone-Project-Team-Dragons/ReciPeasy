@@ -1,91 +1,58 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import db from '../api/db/database'
 import { FlatList } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { getCurrentUser } from '../store/actionCreators';
+import { getPastRecipesThunk } from '../store/actionCreators';
+import { getWishListThunk } from '../store/actionCreators';
 
 class MyRecipesScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { 
-      userId: null,
-      pastRecipes: {}
-    };
-    this.getUserPastRecipes = this.getUserPastRecipes.bind(this);
-    this.insertRecipe = this.insertRecipe.bind(this);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const id = this.props.navigation.getParam('userId');
-    if (id !== prevState.userId) {
-      console.log('In componentDidUpdate')
-      this.getUserPastRecipes(id);
-    }
-  }
-
-  insertRecipe(doc, listName, id) {
-    let objectCopy;
-    if(listName === 'pastRecipes') {
-      objectCopy = Object.create(this.state.pastRecipes);
-      objectCopy[`${doc.id}`] = doc.data();
-      console.log("objectCopy", objectCopy)
-      this.setState({
-        userId: id,
-        pastRecipes: objectCopy
-      }) 
-    }
-  }
-
-  getUserPastRecipes = (id) => {
-    try {
-      db.collection('users')
-        .doc(`${id}`)
-        .collection('pastRecipes')
-        .get()
-        .then(snapshot => {
-            snapshot.forEach(doc => {
-              console.log(doc.id, '=>', doc.data());
-              if(!this.state.pastRecipes.hasOwnProperty(`${doc.id}`)) {
-                  this.insertRecipe(doc, 'pastRecipes', id);
-              }  
-            });
-        }) 
-    } catch (error) {
-      console.log('Error!', error)
-    }
+  componentDidMount() {
+    this.props.getCurrentUser();
   }
 
   render() {
+    const { currentUserId, pastRecipes } = this.props;
+    console.log('In render, currentUserId: ', currentUserId);
+    console.log('In render, pastRecipes: ', pastRecipes);
     return (
       <View style={styles.container}>
-        {this.props.navigation.state.params === undefined ? (
-          <TouchableOpacity
-            horizontal={true}
-            style={styles.loginButton}
-            onPress={() => this.props.navigation.navigate('Login')}
-          >
-            <Text>Login or Sign-Up</Text>
-          </TouchableOpacity>
-        ) : 
-            
-        Object.keys(this.state.pastRecipes).length === 0 ? 
-            <Text>No Recipes to Show! Please Add Recipes</Text>   
-        :  Object.keys(this.state.pastRecipes).length > 0 ?
-            <FlatList 
-              data={Object.keys(this.state.pastRecipes)}
-              keyExtractor={recipeId => recipeId}
-              renderItem={({ item }) => {
-                return (
-                  <Text>Recipe ID: {this.state.pastRecipes[item]['recipeId']}</Text>
-                )
-              }}
-            />
-          : null
-        }
+        {currentUserId === undefined || currentUserId === '' ? (
+          <View>
+            <Text>To View your Recipes, please Login or Sign-Up</Text>
+            <TouchableOpacity
+              horizontal={true}
+              style={styles.loginButton}
+              onPress={() => this.props.navigation.navigate('Login')}
+            >
+              <Text>Login or Sign-Up</Text>
+            </TouchableOpacity>
+          </View>
+        ) : pastRecipes === undefined || pastRecipes === {} ? (
+          <Text>No Recipes to Show! Please Add Recipes</Text>
+        ) : (
+          <Text>Your Recipes</Text>
+        )}
       </View>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    currentUserId: state.usersReducer.currentUserId,
+    pastRecipes: state.pastRecipesReducer.pastRecipes,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getCurrentUser: () => dispatch(getCurrentUser()),
+    getPastRecipesThunk: userId => dispatch(getPastRecipesThunk(userId)),
+    getWishListThunk: userId => dispatch(getWishListThunk(userId)),
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -106,4 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(MyRecipesScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withNavigation(MyRecipesScreen));
