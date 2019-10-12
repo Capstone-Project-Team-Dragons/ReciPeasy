@@ -75,8 +75,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
 
   // A handler when user wants to "Clear Search Results".
   const clearSearchResults = () => {
-    // Make both "Ingredients List" and "Recipes List" empty.
-    setIngredients([]);
+    // Make Recipes List" empty.
     setRecipes([]);
   };
 
@@ -187,8 +186,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   clearSearchResultsButton: {
-    backgroundColor: '#c8edff',
-    marginHorizontal: 100,
+    backgroundColor: '#ff8989',
+    marginHorizontal: 50,
     marginTop: 10,
     marginBottom: 10,
     height: 25,
