@@ -8,6 +8,7 @@ export const GOT_WISHLIST = 'GOT_WISHLIST';
 export const ADD_TO_WISHLIST = 'ADD_TO_WISHLIST';
 export const REMOVE_FROM_WISHLIST = 'REMOVE_FROM_WISHLIST';
 
+export const GET_CURRENT_USER = 'GET_CURRENT_USER';
 export const UPDATE_CURRENT_USER = 'UPDATE_CURRENT_USER';
 
 // ACTION CREATORS
@@ -50,6 +51,11 @@ export const removeFromWishList = recipeId => {
   };
 };
 
+export const getCurrentUser = () => {
+  return {
+    type: GET_CURRENT_USER,
+  };
+};
 export const updateCurrentUser = (userId, status) => {
   return {
     type: UPDATE_CURRENT_USER,
@@ -70,7 +76,7 @@ export const getPastRecipesThunk = userId => {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            //console.log(doc.id, '=>', doc.data());
+            console.log('In snapshot', doc.id, '=>', doc.data());
             pastRecipesObj[`${doc.id}`] = doc.data();
           });
         });

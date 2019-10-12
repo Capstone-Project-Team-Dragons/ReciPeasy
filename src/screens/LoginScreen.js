@@ -85,7 +85,7 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { currentUserId: state.currentUserId };
+  return { currentUserId: state.usersReducer.currentUserId };
 };
 
 const mapDispatchToProps = dispatch => {
