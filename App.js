@@ -12,19 +12,21 @@ import BarcodeScannerScreen from './src/screens/BarcodeScannerScreen';
 import InstructionScreen from './src/screens/InstructionsScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import MyRecipesScreen from './src/screens/MyRecipesScreen';
+import WelcomeScreen from './src/screens/WelcomeScreen';
 
 const SearchRecipesStack = createStackNavigator(
   {
+    WelcomeScreen: WelcomeScreen,
     Search: SearchIngredientsScreen,
     SingleRecipe: SingleRecipeScreen,
-    BarcodeScanner: BarcodeScannerScreen,
-    Instruction: InstructionScreen,
-  },
+    BarcodeScanner: BarcodeScannerScreen, 
+    Instruction: InstructionScreen
+  },   
   {
-    initialRouteName: 'Search',
+    initialRouteName: 'WelcomeScreen',
     defaultNavigationOptions: {
-      title: 'Ingredients Search',
-    },
+       title: "Welcome to the Ingredia"
+     },
   }
 );
 
