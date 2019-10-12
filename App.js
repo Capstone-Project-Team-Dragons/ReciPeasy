@@ -14,18 +14,28 @@ import LoginScreen from './src/screens/LoginScreen';
 import MyRecipesScreen from './src/screens/MyRecipesScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 
+
+const WelcomeStack = createStackNavigator(
+  {
+    Welcome: WelcomeScreen,
+    Login: LoginScreen
+  }, {
+    initialRouteName: 'Welcome'
+  }
+)
+
 const SearchRecipesStack = createStackNavigator(
   {
-    WelcomeScreen: WelcomeScreen,
     Search: SearchIngredientsScreen,
     SingleRecipe: SingleRecipeScreen,
     BarcodeScanner: BarcodeScannerScreen, 
-    Instruction: InstructionScreen
+    Instruction: InstructionScreen,
+    Login: LoginScreen
   },   
   {
-    initialRouteName: 'WelcomeScreen',
+    initialRouteName: 'Search',
     defaultNavigationOptions: {
-       title: "Welcome to the Ingredia"
+       title: "Search Ingredients"
      },
   }
 );
@@ -46,6 +56,12 @@ const MyRecipesStack = createStackNavigator(
 let Navigation = createAppContainer(
   createBottomTabNavigator(
     {
+      'Home' : {
+        screen: WelcomeStack,
+        navigationOptions: {
+          tabBarVisible: false
+        }
+      },
       'Search Recipes': SearchRecipesStack,
       'My Recipes': MyRecipesStack,
     },

@@ -1,6 +1,7 @@
 import React from 'react';
 import * as firebase from 'firebase';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import db from '../api/db/database';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from '../store/actionCreators';
@@ -24,7 +25,7 @@ class Login extends React.Component {
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(res => {
           this.props.updateCurrentUser(res.user.uid, 'loggedIn');
-          this.props.navigation.navigate('MyRecipes');
+          this.props.navigation.navigate('Welcome');
         });
     } catch (error) {
       const errorMessage = error.message;
@@ -48,7 +49,7 @@ class Login extends React.Component {
             .doc('recipe0')
             .set({ recipeId: 0 });
           this.props.updateCurrentUser(res.user.uid, 'loggedIn');
-          this.props.navigation.navigate('MyRecipes');
+          this.props.navigation.navigate('Welcome');
         });
     } catch (error) {
       this.setState({ errorMessage: error.message });
@@ -58,7 +59,7 @@ class Login extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Login</Text>
+        <Text>Login or Sign-up with Your Email</Text>
         {this.state.errorMessage && (
           <Text style={{ color: 'blue' }}>{this.state.errorMessage}</Text>
         )}
@@ -77,8 +78,21 @@ class Login extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Login" onPress={this.handleLogin} />
-        <Button title="Sign-Up" onPress={this.handleSignUp} />
+          <TouchableOpacity
+            horizontal={true}
+            style={styles.loginButton}
+            onPress={() => this.handleLogin}
+          >
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            horizontal={true}
+            style={styles.signUpButton}
+            onPress={() => this.handleSignUp}
+          >
+            <Text style={styles.buttonText}>Sign-Up</Text>
+          </TouchableOpacity>
       </View>
     );
   }
@@ -107,6 +121,35 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 8,
+  },
+  loginButton: {
+    backgroundColor: 'green',
+    height: 40,
+    borderRadius: 5,
+    marginHorizontal: 50,
+    marginTop: 10,
+    width: 150,
+    flexDirection: 'row',
+    marginBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signUpButton: {
+    backgroundColor: 'blue',
+    height: 40,
+    borderRadius: 5,
+    width: 150,
+    marginHorizontal: 50,
+    marginTop: 10,
+    flexDirection: 'row',
+    marginBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
   },
 });
 
