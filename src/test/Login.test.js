@@ -10,6 +10,11 @@ describe('<Login />', () => {
       expect(wrapper.exists()).toBe(true);
     });
 
+    // has Login/Sign Up functionality
+    it('should have Login/Sign Up buttons', () => {
+      const wrapper = shallow(<Login performLogin = {() =>{}} />);
+      expect(wrapper.find('Button').length).toEqual(2);
+    });
+    
   
-
 });

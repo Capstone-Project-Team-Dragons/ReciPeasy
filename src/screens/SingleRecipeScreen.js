@@ -14,6 +14,7 @@ const SingleRecipeScreen = ({ navigation}) => {
         //let url = `/${id}/analyzedInstructions?apiKey=${SPOON_API}`;
         //const instructionsData = await searchInstructionApi(url);
         let url = `/${id}/information?apiKey=${SPOON_API}`;
+        console.log("url", url)
         const addtionalInfoData = await searchInstructionApi(url);
         navigation.navigate('Instruction', { addtionalInfo: addtionalInfoData });
     }
