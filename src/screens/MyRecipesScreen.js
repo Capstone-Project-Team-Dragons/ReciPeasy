@@ -13,12 +13,12 @@ class MyRecipesScreen extends React.Component {
   }
 
   render() {
-    const { currentUserId, pastRecipes } = this.props;
-    console.log('In render, currentUserId: ', currentUserId);
+    const { currentUser, pastRecipes } = this.props;
+    console.log('In render, currentUser: ', currentUser);
     console.log('In render, pastRecipes: ', pastRecipes);
     return (
       <View style={styles.container}>
-        {currentUserId === undefined || currentUserId === '' ? (
+        {currentUser === undefined || currentUser === {} ? (
           <View>
             <Text>To View your Recipes, please Login or Sign-Up</Text>
             <TouchableOpacity
@@ -41,8 +41,9 @@ class MyRecipesScreen extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    currentUserId: state.usersReducer.currentUserId,
+    currentUser: state.usersReducer.currentUser,
     pastRecipes: state.pastRecipesReducer.pastRecipes,
+    wishList: state.wishListReducer.wishList,
   };
 };
 

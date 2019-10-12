@@ -56,10 +56,11 @@ export const getCurrentUser = () => {
     type: GET_CURRENT_USER,
   };
 };
-export const updateCurrentUser = (userId, status) => {
+export const updateCurrentUser = (userId, userEmail, status) => {
   return {
     type: UPDATE_CURRENT_USER,
     userId,
+    userEmail,
     status,
   };
 };

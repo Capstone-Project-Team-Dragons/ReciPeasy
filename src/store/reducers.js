@@ -10,7 +10,7 @@ import {
 } from './actionCreators';
 
 const initialState = {
-  currentUserId: '',
+  currentUser: {},
   pastRecipes: {},
   wishList: {},
 };
@@ -22,9 +22,10 @@ function usersReducer(state = initialState, action) {
       return state;
     case UPDATE_CURRENT_USER:
       if (action.status === 'loggedIn') {
-        return { ...state, currentUserId: action.userId };
+        let userObj = { id: action.userId, email: action.userEmail };
+        return { ...state, currentUser: userObj };
       } else if (action.status === 'loggedOut')
-        return { ...state, currentUserId: '' };
+        return { ...state, currentUser: {} };
     default:
       return state;
   }

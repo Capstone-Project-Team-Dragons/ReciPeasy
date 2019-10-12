@@ -24,7 +24,11 @@ class Login extends React.Component {
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(res => {
-          this.props.updateCurrentUser(res.user.uid, 'loggedIn');
+          this.props.updateCurrentUser(
+            res.user.uid,
+            res.user.email,
+            'loggedIn'
+          );
           this.props.navigation.navigate('Welcome');
         });
     } catch (error) {
@@ -48,7 +52,11 @@ class Login extends React.Component {
             .collection('pastRecipes')
             .doc('recipe0')
             .set({ recipeId: 0 });
-          this.props.updateCurrentUser(res.user.uid, 'loggedIn');
+          this.props.updateCurrentUser(
+            res.user.uid,
+            res.user.email,
+            'loggedIn'
+          );
           this.props.navigation.navigate('Welcome');
         });
     } catch (error) {
@@ -78,34 +86,34 @@ class Login extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-          <TouchableOpacity
-            horizontal={true}
-            style={styles.loginButton}
-            onPress={() => this.handleLogin}
-          >
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          horizontal={true}
+          style={styles.loginButton}
+          onPress={() => this.handleLogin()}
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            horizontal={true}
-            style={styles.signUpButton}
-            onPress={() => this.handleSignUp}
-          >
-            <Text style={styles.buttonText}>Sign-Up</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          horizontal={true}
+          style={styles.signUpButton}
+          onPress={() => this.handleSignUp()}
+        >
+          <Text style={styles.buttonText}>Sign-Up</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { currentUserId: state.usersReducer.currentUserId };
+  return { currentUser: state.usersReducer.currentUser };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateCurrentUser: (userId, status) =>
-      dispatch(updateCurrentUser(userId, status)),
+    updateCurrentUser: (userId, userEmail, status) =>
+      dispatch(updateCurrentUser(userId, userEmail, status)),
   };
 };
 
