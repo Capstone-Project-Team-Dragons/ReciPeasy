@@ -10,7 +10,6 @@ class WelcomeScreen extends React.Component {
 
   render() {
     const { currentUser } = this.props;
-    console.log('In render, currentUser: ', currentUser);
     return (
       <View style={styles.container}>
         <View style={styles.welcomeHeader}>
