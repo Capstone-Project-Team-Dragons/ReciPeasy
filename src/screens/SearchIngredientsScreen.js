@@ -6,6 +6,7 @@ import spoonacular from '../api/spoonacular';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
+import { EvilIcons } from '@expo/vector-icons';
 
 // Recipes Data for testing purpose, saved in json format inside the data.js file.
 //import data from '../testData/recipeData';
@@ -122,13 +123,13 @@ const SearchIngredientsScreen = ({ navigation }) => {
               <View style={styles.ingredientItemContainer}>
                 <Text style={styles.displayItem}>{item}</Text>
 
-                <TouchableOpacity
-                  horizontal={true}
-                  style={styles.removeIngredientButton}
+                <Button
+                  bordered danger
+                  style={{marginLeft: 15, width: 22, height: 22, alignItems: 'center', justifyContent: 'center'}}
                   onPress={() => removeIngredient(item)}
                 >
-                  <Text style={styles.removeIngredientButtonText}>X</Text>
-                </TouchableOpacity>
+                  <EvilIcons name='trash' color='red' size={13}/>
+                </Button>
               </View>
             );
           }}
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
     minHeight: 50,
   },
   displayItem: {
-    fontSize: 16,
+    fontSize: 18,
   },
   ingredientItemContainer: {
     display: 'flex',
