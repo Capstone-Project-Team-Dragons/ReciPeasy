@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 import {
+  GOT_PAST_RECIPES_FROM_STORE,
   GOT_PAST_RECIPES,
   ADD_TO_PAST_RECIPES,
+  GOT_WISHLIST_FROM_STORE,
   GOT_WISHLIST,
   ADD_TO_WISHLIST,
   REMOVE_FROM_WISHLIST,
@@ -34,6 +36,8 @@ function usersReducer(state = initialState, action) {
 // Past Recipes Reducer
 function pastRecipesReducer(state = initialState, action) {
   switch (action.type) {
+    case GOT_PAST_RECIPES_FROM_STORE:
+      return state;
     case GOT_PAST_RECIPES:
       return { ...state, pastRecipes: action.pastRecipes };
     case ADD_TO_PAST_RECIPES:
@@ -51,15 +55,17 @@ function pastRecipesReducer(state = initialState, action) {
 // Wish List Reducer
 function wishListReducer(state = initialState, action) {
   switch (action.type) {
+    case GOT_WISHLIST_FROM_STORE:
+      return state;
     case GOT_WISHLIST:
       return { ...state, wishList: action.wishList };
     case ADD_TO_WISHLIST:
-        let recipeObj = {
-          id: action.recipeId,
-          title: action.recipeTitle,
-          image: action.recipeImage,
-        };
-        return { ...state, wishList: { ...state.wishList, recipeObj } };
+      let recipeObj = {
+        id: action.recipeId,
+        title: action.recipeTitle,
+        image: action.recipeImage,
+      };
+      return { ...state, wishList: { ...state.wishList, recipeObj } };
     default:
       return state;
   }
