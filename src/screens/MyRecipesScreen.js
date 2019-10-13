@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { withNavigation } from 'react-navigation';
+
 import { FlatList } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { getCurrentUser } from '../store/actionCreators';
@@ -13,12 +13,17 @@ class MyRecipesScreen extends React.Component {
   }
 
   render() {
-    const { currentUser, pastRecipes } = this.props;
-    console.log('In render, currentUser: ', currentUser);
-    console.log('In render, pastRecipes: ', pastRecipes);
+    const { currentUser } = this.props;
+    let isLoggedIn = false;
+    if (currentUser !== undefined && currentUser.id) {
+      isLoggedIn = true;
+      this.props.getPastRecipesThunk(currentUser.id);
+    }
+    const { pastRecipes } = this.props;
+
     return (
       <View style={styles.container}>
-        {currentUser === undefined || currentUser === {} ? (
+        {currentUser === undefined || !currentUser.id ? (
           <View>
             <Text>To View your Recipes, please Login or Sign-Up</Text>
             <TouchableOpacity
@@ -29,7 +34,7 @@ class MyRecipesScreen extends React.Component {
               <Text>Login or Sign-Up</Text>
             </TouchableOpacity>
           </View>
-        ) : pastRecipes === undefined || pastRecipes === {} ? (
+        ) : pastRecipes === undefined ? (
           <Text>No Recipes to Show! Please Add Recipes</Text>
         ) : (
           <Text>Your Recipes</Text>
@@ -77,4 +82,4 @@ const styles = StyleSheet.create({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withNavigation(MyRecipesScreen));
+)(MyRecipesScreen);

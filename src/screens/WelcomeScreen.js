@@ -10,7 +10,7 @@ class WelcomeScreen extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.props
+    const { currentUser } = this.props;
     return (
       <ImageBackground source={require('../screens/ingredientsBackground.jpg')} style={styles.imageStyle}>
         <View style={styles.welcomeHeader}>
