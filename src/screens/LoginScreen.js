@@ -1,7 +1,8 @@
 import React from 'react';
 import * as firebase from 'firebase';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View, ImageBackground } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import { Container, Header, Content, Button } from 'native-base';
 import db from '../api/db/database';
 import { connect } from 'react-redux';
 import { updateCurrentUser } from '../store/actionCreators';
@@ -18,6 +19,7 @@ class Login extends React.Component {
     this.handleSignUp = this.handleSignUp.bind(this);
   }
 
+
   handleLogin = () => {
     try {
       firebase
@@ -30,11 +32,15 @@ class Login extends React.Component {
             'loggedIn'
           );
           this.props.navigation.navigate('Welcome');
+        }).
+        catch((err) => {
+          const errmsg = err.message;
+          alert(errmsg)
+          this.setState({errorMessage: errmsg});
         });
     } catch (error) {
       const errorMessage = error.message;
       alert(errorMessage);
-      console.log(error.toString(error));
     }
   };
 
@@ -66,50 +72,59 @@ class Login extends React.Component {
             'loggedIn'
           );
           this.props.navigation.navigate('Welcome');
+        }).
+        catch((err) => {
+          const errmsg = err.message;
+          alert(errmsg)
+          this.setState({errorMessage: errmsg});
         });
     } catch (error) {
+      alert(error.toString(error));
       this.setState({ errorMessage: error.message });
     }
   };
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Login or Sign-up with Your Email</Text>
-        {this.state.errorMessage && (
-          <Text style={{ color: 'blue' }}>{this.state.errorMessage}</Text>
-        )}
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          placeholder="Email"
-          onChangeText={email => this.setState({ email })}
-          value={this.state.email}
-        />
-        <TextInput
-          secureTextEntry
-          style={styles.textInput}
-          autoCapitalize="none"
-          placeholder="Password"
-          onChangeText={password => this.setState({ password })}
-          value={this.state.password}
-        />
-        <TouchableOpacity
-          horizontal={true}
-          style={styles.loginButton}
-          onPress={() => this.handleLogin()}
-        >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+      <ImageBackground source={require('../screens/ingredientsBackground.jpg')} style={styles.imageStyle}>
+        <Text style={styles.loginHeader}>Login or Sign-up with Your Email</Text>
+        <View style={styles.container}>
+          {/* {this.state.errorMessage && (
+            <Text style={{ color: 'blue' }}>{this.state.errorMessage}</Text>
+          )} */}
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize="none"
+            placeholder="Email"
+            onChangeText={email => this.setState({ email })}
+            value={this.state.email}
+          />
+          <TextInput
+            secureTextEntry
+            style={styles.textInput}
+            autoCapitalize="none"
+            placeholder="Password"
+            onChangeText={password => this.setState({ password })}
+            value={this.state.password}
+          />
+  
+          <Button
+            rounded success
+            style={styles.button} 
+            onPress={() => this.handleLogin()} 
+          > 
+            <Text style={styles.buttonText}>Login</Text>
+          </Button>
 
-        <TouchableOpacity
-          horizontal={true}
-          style={styles.signUpButton}
-          onPress={() => this.handleSignUp()}
-        >
-          <Text style={styles.buttonText}>Sign-Up</Text>
-        </TouchableOpacity>
-      </View>
+          <Button
+            rounded info
+            style={styles.button} 
+            onPress={() => this.handleSignUp()}
+          > 
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </Button>
+        </View>
+    </ImageBackground>
     );
   }
 }
@@ -127,45 +142,47 @@ const mapDispatchToProps = dispatch => {
 
 const styles = StyleSheet.create({
   container: {
+    height: 40,
     flex: 1,
-    justifyContent: 'center',
+    // flexDirection: 'column',
     alignItems: 'center',
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 30,
+    marginBottom: 400,
+  },
+  imageStyle: {
+    height: '100%',
+    width: '100%',
+  },
+  loginHeader: {
+    paddingTop: 70,
+    fontWeight: 'bold',
+    color: '#F2C04C',
+    fontSize: 18,
+    textAlignVertical: "center",
+    textAlign: "center",
   },
   textInput: {
+    backgroundColor: 'white',
     height: 40,
     width: '90%',
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 8,
+    fontWeight: 'bold'
   },
-  loginButton: {
-    backgroundColor: 'green',
-    height: 40,
-    borderRadius: 5,
-    marginHorizontal: 50,
-    marginTop: 10,
-    width: 150,
-    flexDirection: 'row',
-    marginBottom: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  signUpButton: {
-    backgroundColor: 'blue',
-    height: 40,
-    borderRadius: 5,
-    width: 150,
-    marginHorizontal: 50,
-    marginTop: 10,
-    flexDirection: 'row',
+  button: {
+    width: 125,
+    color: '#F7E9D0',
+    marginTop: 5,
     marginBottom: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
+    color: '#F2C04C'
   },
 });
 
