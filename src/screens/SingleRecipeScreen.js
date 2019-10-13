@@ -16,6 +16,7 @@ import {
   getPastRecipesThunk,
   addToPastRecipesThunk,
   getWishListThunk,
+  addToWishListThunk
 } from '../store/actionCreators';
 
 class SingleRecipeScreen extends React.Component {
@@ -25,6 +26,7 @@ class SingleRecipeScreen extends React.Component {
       this
     );
     this.searchInstructionApi = this.searchInstructionApi.bind(this);
+    this.addToWishList = this.addToWishList.bind(this);
   }
   componentDidMount() {
     this.props.getCurrentUser();
@@ -55,6 +57,16 @@ class SingleRecipeScreen extends React.Component {
       console.log('Error! ', error);
     }
   };
+
+  addToWishList = (userId, recipeId, title, image) => {
+    try{
+      this.props.addToWishListThunk(userId, recipeId, title, image);
+    }
+    catch(error){
+      console.log('Error! ', error);
+    }
+  };
+
 
   render() {
     const { currentUser } = this.props;
@@ -96,6 +108,16 @@ class SingleRecipeScreen extends React.Component {
           }}
         />
 
+        
+       {currentUser === undefined || !currentUser.id ? null :  
+            <TouchableOpacity
+                horizontal={true}
+                style={styles.searchRecipeButton}
+                onPress={() => this.addToWishList(currentUser.id,recipe.id, recipe.title, recipe.image)}
+            >
+                <Text style={styles.buttonText}>Add to Wish List</Text>
+            </TouchableOpacity> 
+       }
         <TouchableOpacity
           horizontal={true}
           style={styles.searchRecipeButton}
@@ -131,6 +153,10 @@ const mapDispatchToProps = dispatch => {
         addToPastRecipesThunk(userId, recipeId, recipeTitle, recipeImage)
       ),
     getWishListThunk: userId => dispatch(getWishListThunk(userId)),
+    addToWishListThunk: (userId, recipeId, recipeTitle, recipeImage) =>
+      dispatch(
+        addToWishListThunk(userId, recipeId, recipeTitle, recipeImage)
+      )
   };
 };
 

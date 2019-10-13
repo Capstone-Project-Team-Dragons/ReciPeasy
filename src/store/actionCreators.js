@@ -41,9 +41,11 @@ export const getWishList = wishList => {
   };
 };
 
-export const addToWishList = (recipeId, recipeTitle, recipeImage) => {
+export const addToWishList = (
+  userId, recipeId, recipeTitle, recipeImage) => {
   return {
     type: ADD_TO_WISHLIST,
+    userId,
     recipeId,
     recipeTitle,
     recipeImage,
@@ -130,6 +132,28 @@ export const getWishListThunk = userId => {
           });
         });
       dispatch(getWishList(wishListObj));
+    } catch (error) {
+      console.log('Error!', error);
+    }
+  };
+};
+
+export const addToWishListThunk = (
+  userId,
+  recipeId,
+  recipeTitle,
+  recipeImage
+) => {
+  return async function(dispatch) {
+    try {
+      let recipeObj = { id: recipeId, title: recipeTitle, image: recipeImage };
+      await db
+        .collection('users')
+        .doc(`${userId}`)
+        .collection('wishList')
+        .doc(`${recipeId}`)
+        .set(recipeObj);
+      dispatch(addToWishList(userId, recipeId, recipeTitle, recipeImage));
     } catch (error) {
       console.log('Error!', error);
     }

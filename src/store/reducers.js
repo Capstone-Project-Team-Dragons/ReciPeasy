@@ -53,6 +53,13 @@ function wishListReducer(state = initialState, action) {
   switch (action.type) {
     case GOT_WISHLIST:
       return { ...state, wishList: action.wishList };
+    case ADD_TO_WISHLIST:
+        let recipeObj = {
+          id: action.recipeId,
+          title: action.recipeTitle,
+          image: action.recipeImage,
+        };
+        return { ...state, wishList: { ...state.wishList, recipeObj } };
     default:
       return state;
   }
