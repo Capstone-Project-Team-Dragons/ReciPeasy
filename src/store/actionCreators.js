@@ -1,9 +1,11 @@
 import db from '../api/db/database';
 
 // ACTION TYPES
+export const GOT_PAST_RECIPES_FROM_STORE = 'GOT_PAST_RECIPES_FROM_STORE';
 export const GOT_PAST_RECIPES = 'GOT_PAST_RECIPES';
 export const ADD_TO_PAST_RECIPES = 'ADD_TO_PAST_RECIPES';
 
+export const GOT_WISHLIST_FROM_STORE = 'GOT_WISHLIST_FROM_STORE';
 export const GOT_WISHLIST = 'GOT_WISHLIST';
 export const ADD_TO_WISHLIST = 'ADD_TO_WISHLIST';
 export const REMOVE_FROM_WISHLIST = 'REMOVE_FROM_WISHLIST';
@@ -12,6 +14,12 @@ export const GET_CURRENT_USER = 'GET_CURRENT_USER';
 export const UPDATE_CURRENT_USER = 'UPDATE_CURRENT_USER';
 
 // ACTION CREATORS
+export const getPastRecipesFromStore = () => {
+  return {
+    type: GOT_PAST_RECIPES_FROM_STORE,
+  };
+};
+
 export const getPastRecipes = pastRecipes => {
   return {
     type: GOT_PAST_RECIPES,
@@ -34,6 +42,12 @@ export const addToPastRecipes = (
   };
 };
 
+export const getWishListFromStore = () => {
+  return {
+    type: GOT_WISHLIST_FROM_STORE,
+  };
+};
+
 export const getWishList = wishList => {
   return {
     type: GOT_WISHLIST,
@@ -41,8 +55,7 @@ export const getWishList = wishList => {
   };
 };
 
-export const addToWishList = (
-  userId, recipeId, recipeTitle, recipeImage) => {
+export const addToWishList = (userId, recipeId, recipeTitle, recipeImage) => {
   return {
     type: ADD_TO_WISHLIST,
     userId,
@@ -85,7 +98,9 @@ export const getPastRecipesThunk = userId => {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            pastRecipesObj[`${doc.id}`] = doc.data();
+            if (doc.id !== 'recipe0') {
+              pastRecipesObj[`${doc.id}`] = doc.data();
+            }
           });
         });
       dispatch(getPastRecipes(pastRecipesObj));
@@ -128,7 +143,9 @@ export const getWishListThunk = userId => {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            wishListObj[`${doc.id}`] = doc.data();
+            if (doc.id !== 'recipe0') {
+              wishListObj[`${doc.id}`] = doc.data();
+            }
           });
         });
       dispatch(getWishList(wishListObj));
