@@ -19,9 +19,15 @@ export const getPastRecipes = pastRecipes => {
   };
 };
 
-export const addToPastRecipes = (recipeId, recipeTitle, recipeImage) => {
+export const addToPastRecipes = (
+  userId,
+  recipeId,
+  recipeTitle,
+  recipeImage
+) => {
   return {
     type: ADD_TO_PAST_RECIPES,
+    userId,
     recipeId,
     recipeTitle,
     recipeImage,
@@ -77,11 +83,32 @@ export const getPastRecipesThunk = userId => {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            console.log('In snapshot', doc.id, '=>', doc.data());
             pastRecipesObj[`${doc.id}`] = doc.data();
           });
         });
       dispatch(getPastRecipes(pastRecipesObj));
+    } catch (error) {
+      console.log('Error!', error);
+    }
+  };
+};
+
+export const addToPastRecipesThunk = (
+  userId,
+  recipeId,
+  recipeTitle,
+  recipeImage
+) => {
+  return async function(dispatch) {
+    try {
+      let recipeObj = { id: recipeId, title: recipeTitle, image: recipeImage };
+      await db
+        .collection('users')
+        .doc(`${userId}`)
+        .collection('pastRecipes')
+        .doc(`${recipeId}`)
+        .set(recipeObj);
+      dispatch(addToPastRecipes(userId, recipeId, recipeTitle, recipeImage));
     } catch (error) {
       console.log('Error!', error);
     }
@@ -99,7 +126,6 @@ export const getWishListThunk = userId => {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            //console.log(doc.id, '=>', doc.data());
             wishListObj[`${doc.id}`] = doc.data();
           });
         });
