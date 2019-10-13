@@ -17,7 +17,10 @@ import WelcomeScreen from './src/screens/WelcomeScreen';
 
 const WelcomeStack = createStackNavigator(
   {
-    Welcome: WelcomeScreen,
+    Welcome: {
+      screen: WelcomeScreen,
+      title: 'Home'
+    },
     Login: LoginScreen
   }, {
     initialRouteName: 'Welcome'
