@@ -23,12 +23,15 @@ const styles = StyleSheet.create({
         marginLeft: 15
     },
     recipeName: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: 16,
+        textAlign: 'center'
     },
     imageStyle: {
         height: 120,
         width: 250,
-        borderRadius: 5
+        borderRadius: 5,
+        marginLeft: 45
     }
 });
 

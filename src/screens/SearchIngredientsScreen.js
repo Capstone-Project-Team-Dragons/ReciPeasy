@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { Card, CardItem, Button } from 'native-base';
 import SearchBar from '../components/SearchBar';
 import spoonacular from '../api/spoonacular';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -7,7 +8,7 @@ import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
 
 // Recipes Data for testing purpose, saved in json format inside the data.js file.
-// import data from '../testData/recipeData';
+//import data from '../testData/recipeData';
 
 const SearchIngredientsScreen = ({ navigation }) => {
   const [ingredients, setIngredients] = useState([]);
@@ -88,57 +89,79 @@ const SearchIngredientsScreen = ({ navigation }) => {
 
   return (
     <View>
-      <SearchBar
-        currIngredient={currIngredient}
-        onTermChange={newIngred => setCurrIngredient(newIngred)}
-        onTermSubmit={() => submitHandler(currIngredient)}
-      />
+      <View style={{flexDirection: "row"}}>
+        <SearchBar
+          currIngredient={currIngredient}
+          onTermChange={newIngred => setCurrIngredient(newIngred)}
+        />
+        <Button 
+          rounded dark
+          style={styles.addButton}
+          onPress={() => submitHandler(currIngredient)}
+        >
+          <Text style={styles.buttonText}>Add</Text>
+        </Button>
+      </View>
 
-      <Text style={styles.header}>Your List of Ingredients: </Text>
-      <FlatList
-        data={ingredients}
-        style={styles.displayList}
-        keyExtractor={ingredient => ingredient}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.ingredientItemContainer}>
-              <Text style={styles.displayItem}>{item}</Text>
-
-              <TouchableOpacity
-                horizontal={true}
-                style={styles.removeIngredientButton}
-                onPress={() => removeIngredient(item)}
-              >
-                <Text style={styles.removeIngredientButtonText}>X</Text>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
-      />
-
-      <TouchableOpacity
-        horizontal={true}
-        style={styles.searchRecipeButton}
-        onPress={() => searchRecipesApi(ingredients)}
+      <Button
+        small primary
+        style={styles.barcodeButton}
+        onPress={() => navigation.navigate('BarcodeScanner')}
       >
-        <Text style={styles.buttonText}>Find Recipes</Text>
-      </TouchableOpacity>
-      {recipes.length > 0 ? (
-        <View>
-          <TouchableOpacity
-            horizontal={true}
-            style={styles.clearSearchResultsButton}
-            onPress={() => clearSearchResults()}
-          >
-            <Text style={styles.clearSearchResultsButtonText}>
-              Clear Search Results
-            </Text>
-          </TouchableOpacity>
-          <ScrollView>
+        <Text style={styles.buttonText}>Or Scan Ingredient's Barcode</Text>
+      </Button>
+
+      <View>
+        <Text style={styles.header}>Your List of Ingredients: </Text>
+        <FlatList
+          data={ingredients}
+          style={styles.displayList}
+          keyExtractor={ingredient => ingredient}
+          renderItem={({ item }) => {
+            return (
+              <View style={styles.ingredientItemContainer}>
+                <Text style={styles.displayItem}>{item}</Text>
+
+                <TouchableOpacity
+                  horizontal={true}
+                  style={styles.removeIngredientButton}
+                  onPress={() => removeIngredient(item)}
+                >
+                  <Text style={styles.removeIngredientButtonText}>X</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+        />
+      </View>
+
+      <View style={{flexDirection: "row"}}>
+        <TouchableOpacity
+          horizontal={true}
+          style={styles.searchRecipeButton}
+          onPress={() => searchRecipesApi(ingredients)}
+        >
+          <Text style={styles.barcodeText}>Find Recipes</Text>
+        </TouchableOpacity>
+        {recipes.length > 0 ? (
+          <View>
+            <TouchableOpacity
+              horizontal={true}
+              style={styles.clearSearchResultsButton}
+              onPress={() => clearSearchResults()}
+            >
+              <Text style={styles.clearSearchResultsButtonText}>
+                Clear Search Results
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : null }
+      </View>
+      <View>
+        <ScrollView style={{height: 500}}>
             <RecipeList allRecipes={recipes} />
-          </ScrollView>
-        </View>
-      ) : null}
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -152,7 +175,7 @@ const styles = StyleSheet.create({
   displayList: {
     marginTop: 5,
     marginLeft: 15,
-    minHeight: 100,
+    minHeight: 50,
   },
   displayItem: {
     fontSize: 16,
@@ -173,25 +196,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#66ccff',
     height: 40,
     borderRadius: 5,
-    marginHorizontal: 50,
+    marginHorizontal: 35,
     marginTop: 10,
     flexDirection: 'row',
-    marginBottom: 5,
+    marginBottom: 10,
+    marginLeft: 15,
+    width: 150,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
     color: 'white',
   },
   clearSearchResultsButton: {
     backgroundColor: '#ff8989',
-    marginHorizontal: 50,
+    // marginHorizontal: 50,
     marginTop: 10,
+    borderRadius: 5,
+    flexDirection: 'row',
     marginBottom: 10,
-    height: 25,
+    height: 40,
+    width: 150,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   clearSearchResultsButtonText: {
     fontSize: 16,
@@ -199,6 +228,25 @@ const styles = StyleSheet.create({
     color: 'grey',
     textAlign: 'center',
   },
+  addButton: {
+    marginTop: 15,
+    width: 60,
+    color: '#F7E9D0',
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  barcodeButton: {
+    width: 200,
+    // color: '#F7E9D0',
+    marginBottom: 5,
+    marginLeft: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  barcodeText: {
+    fontSize: 16
+  }
 });
 
 export default SearchIngredientsScreen;

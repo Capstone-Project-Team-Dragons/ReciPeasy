@@ -11,7 +11,7 @@ import RecipeDetail from './RecipeDetail';
 
 const RecipeList = ({ allRecipes, navigation }) => {
   return (
-    <View>
+    <View style={{marginBottom: 100}}>
       <FlatList
         data={allRecipes}
         keyExtractor={singleRecipe => String(singleRecipe.id)}

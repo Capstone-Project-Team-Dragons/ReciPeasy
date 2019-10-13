@@ -38,7 +38,7 @@ const SearchRecipesStack = createStackNavigator(
   {
     initialRouteName: 'Search',
     defaultNavigationOptions: {
-       title: "Search Ingredients"
+       title: "Search for Recipes"
      },
   }
 );
