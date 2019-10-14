@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 import {
   GOT_PAST_RECIPES_FROM_STORE,
+  CLEAR_PAST_RECIPES_FROM_STORE,
   GOT_PAST_RECIPES,
   ADD_TO_PAST_RECIPES,
   GOT_WISHLIST_FROM_STORE,
+  CLEAR_WISHLIST_FROM_STORE,
   GOT_WISHLIST,
   ADD_TO_WISHLIST,
   REMOVE_FROM_WISHLIST,
@@ -38,6 +40,8 @@ function pastRecipesReducer(state = initialState, action) {
   switch (action.type) {
     case GOT_PAST_RECIPES_FROM_STORE:
       return state;
+    case CLEAR_PAST_RECIPES_FROM_STORE:
+      return { ...state, pastRecipes: {} };
     case GOT_PAST_RECIPES:
       return { ...state, pastRecipes: action.pastRecipes };
     case ADD_TO_PAST_RECIPES:
@@ -57,6 +61,8 @@ function wishListReducer(state = initialState, action) {
   switch (action.type) {
     case GOT_WISHLIST_FROM_STORE:
       return state;
+    case CLEAR_WISHLIST_FROM_STORE:
+      return { ...state, wishList: {} };
     case GOT_WISHLIST:
       return { ...state, wishList: action.wishList };
     case ADD_TO_WISHLIST:

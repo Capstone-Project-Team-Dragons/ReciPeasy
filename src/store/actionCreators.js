@@ -2,10 +2,12 @@ import db from '../api/db/database';
 
 // ACTION TYPES
 export const GOT_PAST_RECIPES_FROM_STORE = 'GOT_PAST_RECIPES_FROM_STORE';
+export const CLEAR_PAST_RECIPES_FROM_STORE = 'CLEAR_PAST_RECIPES_FROM_STORE';
 export const GOT_PAST_RECIPES = 'GOT_PAST_RECIPES';
 export const ADD_TO_PAST_RECIPES = 'ADD_TO_PAST_RECIPES';
 
 export const GOT_WISHLIST_FROM_STORE = 'GOT_WISHLIST_FROM_STORE';
+export const CLEAR_WISHLIST_FROM_STORE = 'CLEAR_WISHLIST_FROM_STORE';
 export const GOT_WISHLIST = 'GOT_WISHLIST';
 export const ADD_TO_WISHLIST = 'ADD_TO_WISHLIST';
 export const REMOVE_FROM_WISHLIST = 'REMOVE_FROM_WISHLIST';
@@ -17,6 +19,12 @@ export const UPDATE_CURRENT_USER = 'UPDATE_CURRENT_USER';
 export const getPastRecipesFromStore = () => {
   return {
     type: GOT_PAST_RECIPES_FROM_STORE,
+  };
+};
+
+export const clearPastRecipesFromStore = () => {
+  return {
+    type: CLEAR_PAST_RECIPES_FROM_STORE,
   };
 };
 
@@ -45,6 +53,12 @@ export const addToPastRecipes = (
 export const getWishListFromStore = () => {
   return {
     type: GOT_WISHLIST_FROM_STORE,
+  };
+};
+
+export const clearWishListFromStore = () => {
+  return {
+    type: CLEAR_WISHLIST_FROM_STORE,
   };
 };
 
@@ -98,9 +112,7 @@ export const getPastRecipesThunk = userId => {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            if (doc.id !== 'recipe0') {
-              pastRecipesObj[`${doc.id}`] = doc.data();
-            }
+            pastRecipesObj[`${doc.id}`] = doc.data();
           });
         });
       dispatch(getPastRecipes(pastRecipesObj));
@@ -143,9 +155,7 @@ export const getWishListThunk = userId => {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            if (doc.id !== 'recipe0') {
-              wishListObj[`${doc.id}`] = doc.data();
-            }
+            wishListObj[`${doc.id}`] = doc.data();
           });
         });
       dispatch(getWishList(wishListObj));
