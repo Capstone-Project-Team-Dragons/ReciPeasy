@@ -138,11 +138,7 @@ export const getWishListThunk = userId => {
   };
 };
 
-export const addToWishListThunk = (
-  userId,
-  recipeId,
-  recipeTitle,
-  recipeImage
+export const addToWishListThunk = (userId, recipeId, recipeTitle, recipeImage
 ) => {
   return async function(dispatch) {
     try {
@@ -158,4 +154,48 @@ export const addToWishListThunk = (
       console.log('Error!', error);
     }
   };
+};
+
+
+// KL
+export const getWishListThunkByRecipeId = (userId, recipeId) => {
+  return async function(dispatch) {
+      let wishListObj = {};
+      await db
+        .collection('users')
+        .doc(`${userId}`)
+        .collection('wishList')
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            if (doc.id == recipeId){
+              wishListObj[`${doc.id}`] = doc.data();
+            }
+          });
+        })
+        .catch(function(error) {
+          console.error("Error removing document: ", error);
+        });
+      dispatch(getWishList(wishListObj));
+    };
+};
+
+
+export const removeFromWishListThunk = (userId, recipeId, recipeTitle, recipeImage) => {
+  return async function(dispatch) {
+    const wishListObj = {};
+    await db
+        .collection('users')
+        .doc(`${userId}`)
+        .collection('wishList')
+        .doc(`${recipeId}`)
+        .delete()
+        .then(function() {
+          //console.log(`recipe: ${recipeId} successfully deleted!`);
+        })
+        .catch(function(error) {
+          console.error("Error removing document: ", error);
+        });
+      dispatch(getWishList(wishListObj));
+    };
 };
