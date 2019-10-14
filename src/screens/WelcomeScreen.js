@@ -127,17 +127,12 @@ const styles = StyleSheet.create({
   },
   welcomeHeader: {
     height: 90,
-    // width: 300,
-    // backgroundColor: 'white',
     marginLeft: 20,
     marginRight: 20,
     marginTop: 60,
     marginBottom: 20,
     alignItems: 'center',
     borderRadius: 5,
-    // padding: 30,
-    //paddingTop: 30,
-    // paddingLeft: 40,
   },
   welcomeHeaderText: {
     fontSize: 50,

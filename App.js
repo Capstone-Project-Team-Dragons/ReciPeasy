@@ -1,6 +1,7 @@
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
+import { Root } from "native-base";
 
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -88,7 +89,9 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <Navigation />
+        <Root>
+          <Navigation />
+        </Root>
       </Provider>
     );
   }

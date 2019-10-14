@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { Card, CardItem, Button } from 'native-base';
+import { Button, Toast } from 'native-base';
 import SearchBar from '../components/SearchBar';
 import spoonacular from '../api/spoonacular';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
@@ -43,16 +43,33 @@ const SearchIngredientsScreen = ({ navigation }) => {
     }
   };
 
+  formatIngredientName = (ingredient) => {
+    let formatted = ingredient[0].toUpperCase() + ingredient.slice(1);
+    return formatted;
+  }
+
   // A handler when an ingredient is submitted by user, either manually or by scanning barcode.
   const submitHandler = cIngredient => {
-    let currItem = cIngredient.trim().toLowerCase();
-    if (currItem.length > 0) {
-      if (ingredients.includes(currItem)) {
-        setCurrIngredient('');
-      } else {
-        setIngredients([...ingredients, currItem]);
-        setCurrIngredient('');
+    let currItem;
+    if(cIngredient !== '') {
+      currItem = formatIngredientName(cIngredient.trim().toLowerCase());
+
+      if (currItem.length > 0) {
+        if (ingredients.includes(currItem)) {
+          setCurrIngredient('');
+        } else {
+          setIngredients([...ingredients, currItem]);
+          setCurrIngredient('');
+        }
       }
+
+    } else {
+      Toast.show({
+        text: `Please type in an ingredient, cannot be empty!`,
+        buttonText: 'Okay',
+        duration: 3000,
+        type: 'warning'
+      })
     }
   };
 

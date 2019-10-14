@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import { Toast, Button } from 'native-base';
 import { SPOON_API } from 'react-native-dotenv';
 import spoonacular from '../api/spoonacular';
 import { connect } from 'react-redux';
@@ -50,12 +51,23 @@ class SingleRecipeScreen extends React.Component {
     
       if (isExsits){
         // alreay exists
-        alert(`Recipe: ${title} already exists in your Wish List.`);
+        //alert(`Recipe: ${title} already exists in your Wish List.`);
+        Toast.show({
+          text: `${title} already exists in your Wish List!`,
+          buttonText: 'Okay',
+          duration: 3000,
+          type: 'warning'
+        })
       }
       else {
         // add to the wishlist
         this.props.addToWishListThunk(userId, recipeId, title, image);
-        alert(`Recipe: ${title} has been added successfully to your Wish List.`);
+        Toast.show({
+          text: `${title} has been added successfully to your Wish List!`,
+          buttonText: 'Okay',
+          duration: 3000,
+          type: 'success'
+        })
       }
     }
     catch(error){
@@ -65,7 +77,17 @@ class SingleRecipeScreen extends React.Component {
 
   removeFromWishList = (userId, recipeId, title) => {
     this.props.removeFromWishListThunk(userId, recipeId);
-    alert(`Recipe: ${title} has been removed successfully from your Wish List.`);
+    Toast.show({
+      text: `${title} has been removed successfully from your Wish List.`,
+      buttonText: 'Okay',
+      duration: 3000,
+      type: 'danger'
+    })
+  }
+
+  formatIngredientName = (ingredient) => {
+    let formatted = ingredient[0].toUpperCase() + ingredient.slice(1);
+    return formatted;
   }
 
   render() {
@@ -81,59 +103,79 @@ class SingleRecipeScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.recipeNameTitle}>Recipe: {recipe.title}</Text>
+        <Text style={styles.recipeNameTitle}>{this.formatIngredientName(recipe.title)}</Text>
         <Image style={styles.imageStyle} source={{ uri: recipe.image }} />
+
         <Text style={styles.recipeName}>
-          Total Used Ingredient(s): {recipe.usedIngredientCount}{' '}
+          Total Used Ingredient(s) from Your List: {recipe.usedIngredientCount}{' '}
         </Text>
 
         <FlatList
           data={recipe.usedIngredients}
-          style={styles.displayList}
           keyExtractor={(item, index) => 'key' + index}
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             return (
               <View style={styles.container}>
-                <Image
-                  style={styles.imageIngredientStyle}
-                  source={{ uri: item.image }}
-                />
-                <Text style={styles.recipeIngredientName}>
-                  Name: {item.name}
-                </Text>
-                <Text style={styles.recipeIngredientName}>
-                  Quantity Need: {item.original}
-                </Text>
+                <View style={{flexDirection: "row"}}> 
+                  <Text style={{fontWeight: 'bold', fontSize: 15}}>{index + 1}. {this.formatIngredientName(item.name)}</Text>
+                </View>
+                <View>
+                  <Text style={{textDecorationLine: 'underline', fontSize: 14, marginLeft: 15}}>More Information:</Text>
+                  <Text style={styles.recipeIngredientName}>{item.originalString}</Text>
+                </View>
               </View>
             );
           }}
         />
 
-        
+        <Text style={styles.recipeName}>
+          Remaining Ingredient(s) You Will Need: {recipe.missedIngredientCount}{' '}
+        </Text>
+
+        <FlatList
+          data={recipe.missedIngredients}
+          keyExtractor={(item, index) => 'key' + index}
+          renderItem={({ item, index }) => {
+            return (
+                <View style={styles.container}>
+                  <View style={{flexDirection: "row"}}> 
+                    <Text style={{fontWeight: 'bold', fontSize: 15}}>{index + 1}. {this.formatIngredientName(item.name)}</Text>
+                  </View>
+                  <View>
+                    <Text style={{textDecorationLine: 'underline', fontSize: 14, marginLeft: 15}}>More Information:</Text>
+                    <Text style={styles.recipeIngredientName}>{item.originalString}</Text>
+                  </View>
+                </View> 
+            );
+          }}
+        />
+  
        {currentUser === undefined || !currentUser.id ? null :  
             <View>
                 {wishList === undefined || Object.entries(wishList).length <= 0 ?
-                  <TouchableOpacity
-                      horizontal={true}
-                      style={styles.searchRecipeButton}
-                      onPress={() => this.addToWishList(currentUser.id,recipe.id, recipe.title, recipe.image)}
+
+                  <Button
+                    rounded success
+                    style={styles.button}
+                    onPress={() => this.addToWishList(currentUser.id,recipe.id, recipe.title, recipe.image)}
                   >
-                      <Text style={styles.buttonText}>Add to Wish List</Text>
-                  </TouchableOpacity>
+                    <Text style={styles.buttonText}>Add to Wish List</Text>
+                  </Button>
                 :
-                    <TouchableOpacity
-                        horizontal={true}
-                        style={styles.searchRecipeButton}
-                        onPress={() => this.removeFromWishList(currentUser.id,recipe.id, recipe.title)}
-                    >
-                        <Text style={styles.buttonText}>Remove from Wish List</Text>
-                  </TouchableOpacity> 
+                  <Button
+                    rounded danger
+                    style={styles.button}
+                    onPress={() => this.removeFromWishList(currentUser.id,recipe.id, recipe.title)}
+                  >
+                      <Text style={styles.buttonText}>Remove from Wish List</Text>
+                  </Button>
                 }
            </View>
        }
-        <TouchableOpacity
-          horizontal={true}
-          style={styles.searchRecipeButton}
+
+        <Button
+          rounded dark
+          style={styles.button}
           onPress={() =>
             this.searchInstructionAndAddiInfoData(
               currentUser.id,
@@ -143,7 +185,7 @@ class SingleRecipeScreen extends React.Component {
           }
         >
           <Text style={styles.buttonText}>Instruction Details</Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     );
   }
@@ -185,33 +227,34 @@ const styles = StyleSheet.create({
   },
   recipeName: {
     fontWeight: 'bold',
+    fontSize: 16,
+    marginLeft: 10,
+    marginTop: 10
   },
   displayList: {
     marginTop: 5,
-    marginLeft: 15,
+    marginLeft: 10,
   },
   imageStyle: {
-    height: 120,
-    width: 250,
+    height: 200,
+    width: 320,
     borderRadius: 5,
-    margin: 5,
+    marginTop: 10,
+    marginLeft: 15,
     marginBottom: 15,
-  },
-  imageIngredientStyle: {
-    height: 80,
-    width: 100,
-    borderRadius: 5,
-    padding: 5,
   },
   recipeNameTitle: {
     fontWeight: 'bold',
-    margin: 5,
+    margin: 10,
+    fontSize: 20,
+    textAlign: "center",
+
   },
   recipeIngredientName: {
-    fontSize: 12,
+    fontSize: 14,
+    marginLeft: 20
   },
-  searchRecipeButton: {
-    backgroundColor: '#66ccff',
+  button: {
     height: 30,
     borderRadius: 5,
     marginHorizontal: 100,
@@ -224,7 +267,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#F2C04C',
   },
 });
 
