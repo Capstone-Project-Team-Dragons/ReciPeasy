@@ -1,72 +1,72 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { SPOON_API } from 'react-native-dotenv';
 import spoonacular from '../api/spoonacular';
-
 import { connect } from 'react-redux';
-import {
-  getCurrentUser,
-  getPastRecipesThunk,
-  addToPastRecipesThunk,
-  getWishListThunk,
-  addToWishListThunk
-} from '../store/actionCreators';
+import {getCurrentUser, getPastRecipesThunk, addToPastRecipesThunk, getWishListThunk, 
+  getWishListThunkByRecipeId, addToWishListThunk, removeFromWishListThunk} from '../store/actionCreators';
 
 class SingleRecipeScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.searchInstructionAndAddiInfoData = this.searchInstructionAndAddiInfoData.bind(
-      this
-    );
-    this.searchInstructionApi = this.searchInstructionApi.bind(this);
+    this.searchInstructionAndAddiInfoData = this.searchInstructionAndAddiInfoData.bind(this);
     this.addToWishList = this.addToWishList.bind(this);
+    this.removeFromWishList = this.removeFromWishList.bind(this);
   }
   componentDidMount() {
     this.props.getCurrentUser();
+    const recipe = this.props.navigation.getParam('recipe');
+    this.props.getWishListThunkByRecipeId(this.props.currentUser.id, recipe.id);
   }
 
   searchInstructionAndAddiInfoData = async (userId, recipeId, isLoggedIn) => {
     const recipe = this.props.navigation.getParam('recipe');
     let url = `/${recipeId}/information?apiKey=${SPOON_API}`;
-    const addtionalInfoData = await this.searchInstructionApi(url);
+    const addtionalInfoData = await spoonacular.get(url);
     if (isLoggedIn === true) {
-      this.props.addToPastRecipesThunk(
-        userId,
-        recipe.id,
-        recipe.title,
-        recipe.image
-      );
+      this.props.addToPastRecipesThunk(userId, recipe.id, recipe.title,recipe.image);
     }
     this.props.navigation.navigate('Instruction', {
       addtionalInfo: addtionalInfoData,
     });
   };
 
-  searchInstructionApi = async url => {
-    try {
-      const { data } = await spoonacular.get(url);
-      return data;
-    } catch (error) {
-      console.log('Error! ', error);
-    }
-  };
-
-  addToWishList = (userId, recipeId, title, image) => {
+  addToWishList = async (userId, recipeId, title, image) => {
     try{
-      this.props.addToWishListThunk(userId, recipeId, title, image);
+      // check if it is in wishlist
+      let isExsits = false;
+      let { wishList } = this.props;
+      if ( wishList !== undefined &&  Object.entries(wishList).length > 0 && wishList["id"] == recipeId){
+         isExsits = true;
+      }
+      else {
+        // dispatch
+        await this.props.getWishListThunkByRecipeId(userId, recipeId);
+        wishList = this.props.wishList;
+        if(wishList !== undefined && Object.entries(wishList).length > 0){
+          isExsits = true;
+        }
+      }
+    
+      if (isExsits){
+        // alreay exists
+        alert(`Recipe: ${title} already exists in your Wish List.`);
+      }
+      else {
+        // add to the wishlist
+        this.props.addToWishListThunk(userId, recipeId, title, image);
+        alert(`Recipe: ${title} has been added successfully to your Wish List.`);
+      }
     }
     catch(error){
       console.log('Error! ', error);
     }
   };
 
+  removeFromWishList = (userId, recipeId, title) => {
+    this.props.removeFromWishListThunk(userId, recipeId);
+    alert(`Recipe: ${title} has been removed successfully from your Wish List.`);
+  }
 
   render() {
     const { currentUser } = this.props;
@@ -77,6 +77,7 @@ class SingleRecipeScreen extends React.Component {
       this.props.getPastRecipesThunk(currentUser.id);
     }
     const { pastRecipes } = this.props;
+    const { wishList } = this.props;
 
     return (
       <View style={styles.container}>
@@ -110,13 +111,25 @@ class SingleRecipeScreen extends React.Component {
 
         
        {currentUser === undefined || !currentUser.id ? null :  
-            <TouchableOpacity
-                horizontal={true}
-                style={styles.searchRecipeButton}
-                onPress={() => this.addToWishList(currentUser.id,recipe.id, recipe.title, recipe.image)}
-            >
-                <Text style={styles.buttonText}>Add to Wish List</Text>
-            </TouchableOpacity> 
+            <View>
+                {wishList === undefined || Object.entries(wishList).length <= 0 ?
+                  <TouchableOpacity
+                      horizontal={true}
+                      style={styles.searchRecipeButton}
+                      onPress={() => this.addToWishList(currentUser.id,recipe.id, recipe.title, recipe.image)}
+                  >
+                      <Text style={styles.buttonText}>Add to Wish List</Text>
+                  </TouchableOpacity>
+                :
+                    <TouchableOpacity
+                        horizontal={true}
+                        style={styles.searchRecipeButton}
+                        onPress={() => this.removeFromWishList(currentUser.id,recipe.id, recipe.title)}
+                    >
+                        <Text style={styles.buttonText}>Remove from Wish List</Text>
+                  </TouchableOpacity> 
+                }
+           </View>
        }
         <TouchableOpacity
           horizontal={true}
@@ -153,10 +166,15 @@ const mapDispatchToProps = dispatch => {
         addToPastRecipesThunk(userId, recipeId, recipeTitle, recipeImage)
       ),
     getWishListThunk: userId => dispatch(getWishListThunk(userId)),
+    getWishListThunkByRecipeId: (userId, recipeId) => dispatch(getWishListThunkByRecipeId(userId, recipeId)),
     addToWishListThunk: (userId, recipeId, recipeTitle, recipeImage) =>
       dispatch(
         addToWishListThunk(userId, recipeId, recipeTitle, recipeImage)
-      )
+      ),
+    removeFromWishListThunk: (userId, recipeId) =>
+      dispatch(
+        removeFromWishListThunk(userId, recipeId)
+      ) 
   };
 };
 
