@@ -14,32 +14,32 @@ import LoginScreen from './src/screens/LoginScreen';
 import MyRecipesScreen from './src/screens/MyRecipesScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 
-
 const WelcomeStack = createStackNavigator(
   {
     Welcome: {
       screen: WelcomeScreen,
-      title: 'Home'
+      title: 'Home',
     },
-    Login: LoginScreen
-  }, {
-    initialRouteName: 'Welcome'
+    Login: LoginScreen,
+  },
+  {
+    initialRouteName: 'Welcome',
   }
-)
+);
 
 const SearchRecipesStack = createStackNavigator(
   {
     Search: SearchIngredientsScreen,
     SingleRecipe: SingleRecipeScreen,
-    BarcodeScanner: BarcodeScannerScreen, 
+    BarcodeScanner: BarcodeScannerScreen,
     Instruction: InstructionScreen,
-    Login: LoginScreen
-  },   
+    Login: LoginScreen,
+  },
   {
     initialRouteName: 'Search',
     defaultNavigationOptions: {
-       title: "Search for Recipes"
-     },
+      title: 'Search for Recipes',
+    },
   }
 );
 
@@ -59,16 +59,28 @@ const MyRecipesStack = createStackNavigator(
 let Navigation = createAppContainer(
   createBottomTabNavigator(
     {
-      'Home' : {
+      Home: {
         screen: WelcomeStack,
         navigationOptions: {
-          tabBarVisible: false
-        }
+          tabBarVisible: false,
+        },
       },
       'Search Recipes': SearchRecipesStack,
       'My Recipes': MyRecipesStack,
     },
-    {}
+    {
+      tabBarOptions: {
+        activeBackgroundColor: '#304b5a',
+        labelStyle: {
+          fontSize: 14,
+          fontWeight: 'bold',
+          color: '#F2C04C',
+        },
+        style: {
+          backgroundColor: '#141414',
+        },
+      },
+    }
   )
 );
 

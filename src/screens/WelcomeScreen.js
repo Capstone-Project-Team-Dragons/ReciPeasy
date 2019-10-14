@@ -1,65 +1,106 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  ImageBackground,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Content, Button } from 'native-base';
-import { updateCurrentUser, getCurrentUser } from '../store/actionCreators';
+import {
+  updateCurrentUser,
+  getCurrentUser,
+  clearPastRecipesFromStore,
+  clearWishListFromStore,
+} from '../store/actionCreators';
 
 class WelcomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleLogout = this.handleLogout.bind(this);
+  }
   componentDidMount() {
     this.props.getCurrentUser();
+  }
+  componentDidUpdate() {
+    this.props.getCurrentUser();
+  }
+
+  handleLogout() {
+    this.props.updateCurrentUser(
+      this.props.currentUser.id,
+      this.props.currentUser.email,
+      'loggedOut'
+    );
+    this.props.clearPastRecipesFromStore();
+    this.props.clearWishListFromStore();
   }
 
   render() {
     const { currentUser } = this.props;
     return (
-      <ImageBackground source={require('../screens/ingredientsBackground.jpg')} style={styles.imageStyle}>
+      <ImageBackground
+        source={require('../screens/ingredientsBackground.jpg')}
+        style={styles.imageStyle}
+      >
         <View style={styles.welcomeHeader}>
           <Text style={styles.welcomeHeaderText}>ingredia</Text>
-          <Text style={styles.slogan}>give us your list of ingredients, and we'll give you some delicious recipes to whip up!</Text>
-          
-          {currentUser === undefined || !currentUser.id ? 
-            (
-              <View>
-                <Button
-                  rounded dark
-                  style={styles.button} 
-                  onPress={() => this.props.navigation.navigate('Login')} 
-                > 
-                  <Text style={styles.buttonText}>Login or Sign Up</Text>
-                </Button>
+          <Text style={styles.slogan}>
+            give us your list of ingredients, and we'll give you some delicious
+            recipes to whip up!
+          </Text>
 
-                <Button
-                  rounded dark
-                  style={styles.button} 
-                  onPress={() => this.props.navigation.navigate('Search')} 
-                > 
-                  <Text style={styles.buttonText}>Continue as a Guest</Text>
-                </Button>
-              </View>
-            ) : (
-              <View>
-                  <Text style={styles.welcomeMessage}>Welcome {currentUser.email}!</Text>
-                  <Button
-                    rounded light
-                    style={styles.searchButton} 
-                    onPress={() => this.props.navigation.navigate('Search')} 
-                  > 
-                    <Text style={styles.buttonText}>Click here to start adding ingredients</Text>
-                  </Button>
+          {currentUser === undefined || !currentUser.id ? (
+            <View>
+              <Button
+                rounded
+                dark
+                style={styles.button}
+                onPress={() => this.props.navigation.navigate('Login')}
+              >
+                <Text style={styles.buttonText}>Login or Sign Up</Text>
+              </Button>
 
-                  <Button
-                    rounded light
-                    style={styles.logOutButton} 
-                    onPress={() => this.props.updateCurrentUser(currentUser.id, currentUser.email, 'loggedOut')} 
-                  > 
-                    <Text style={styles.buttonText}>Log Out</Text>
-                  </Button>
-              </View>            
-            )
-          }
+              <Button
+                rounded
+                dark
+                style={styles.button}
+                onPress={() => this.props.navigation.navigate('Search')}
+              >
+                <Text style={styles.buttonText}>Continue as a Guest</Text>
+              </Button>
+            </View>
+          ) : (
+            <View>
+              <Text style={styles.welcomeMessage}>
+                Welcome {currentUser.email}!
+              </Text>
+              <Button
+                rounded
+                light
+                style={styles.searchButton}
+                onPress={() => this.props.navigation.navigate('Search')}
+              >
+                <Text style={styles.searchButtonText}>
+                  Click here to start adding ingredients
+                </Text>
+              </Button>
+
+              <Button
+                rounded
+                light
+                style={styles.logOutButton}
+                onPress={this.handleLogout}
+              >
+                <Text style={styles.logoutButtonText}>Log Out</Text>
+              </Button>
+            </View>
+          )}
         </View>
       </ImageBackground>
-    )
+    );
   }
 }
 
@@ -74,6 +115,8 @@ const mapDispatchToProps = dispatch => {
     getCurrentUser: () => dispatch(getCurrentUser()),
     updateCurrentUser: (userId, userEmail, status) =>
       dispatch(updateCurrentUser(userId, userEmail, status)),
+    clearPastRecipesFromStore: () => dispatch(clearPastRecipesFromStore()),
+    clearWishListFromStore: () => dispatch(clearWishListFromStore()),
   };
 };
 
@@ -99,16 +142,16 @@ const styles = StyleSheet.create({
   welcomeHeaderText: {
     fontSize: 50,
     fontWeight: 'bold',
-    color: '#F2C04C'
+    color: '#F2C04C',
   },
   slogan: {
     paddingTop: 15,
     paddingBottom: 15,
     fontSize: 16,
-    textAlignVertical: "center",
-    textAlign: "center",
+    textAlignVertical: 'center',
+    textAlign: 'center',
     fontStyle: 'italic',
-    color: '#F2C04C'
+    color: '#F2C04C',
   },
   imageStyle: {
     height: '100%',
@@ -126,17 +169,17 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     color: '#F7E9D0',
     fontSize: 25,
-    textAlignVertical: "center",
-    textAlign: "center",
+    textAlignVertical: 'center',
+    textAlign: 'center',
   },
   searchButton: {
     marginTop: 20,
-    width: 300,
+    width: 330,
     color: '#F7E9D0',
     marginBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
-  }, 
+  },
   logOutButton: {
     marginLeft: 80,
     marginTop: 5,
@@ -149,6 +192,15 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: '#F2C04C',
+  },
+  searchButtonText: {
+    fontSize: 18,
+    color: '#dfa110',
+    fontWeight: 'bold',
+  },
+  logoutButtonText: {
+    fontSize: 18,
+    color: '#dfa110',
   },
 });
 

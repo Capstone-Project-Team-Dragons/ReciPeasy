@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 
-import { FlatList } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import {
   getCurrentUser,
@@ -10,55 +10,97 @@ import {
   getWishListFromStore,
   getWishListThunk,
 } from '../store/actionCreators';
+import RecipeList from '../components/RecipeList';
 
-class MyRecipesScreen extends React.Component {
+class MyRecipesScreen extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+    };
+  }
+
   componentDidMount() {
     this.props.getCurrentUser();
+    const { currentUser } = this.props;
+    // retrieve past recipes and wishlist from databse
+    this.props.getPastRecipesThunk(currentUser.id);
+    this.props.getWishListThunk(currentUser.id);
+    const { pastRecipes, wishList } = this.props;
+
+    if (
+      JSON.stringify(pastRecipes) !== JSON.stringify({}) &&
+      JSON.stringify(wishList) !== JSON.stringify({})
+    ) {
+      this.setState({
+        isLoading: false,
+      });
+    } else {
+      this.setState({
+        isLoading: true,
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.pastRecipes !== prevProps.pastRecipes ||
+      this.props.wishList !== prevProps.wishList
+    ) {
+      this.setState({
+        isLoading: false,
+      });
+    }
   }
 
   render() {
-    const { currentUser } = this.props;
-    let isLoggedIn = false;
-    let doMyRecipesExist = false;
-    let doPastRecipesExists = false;
-    let doWishListExists = false;
-
-    // retrieve past recipes and wishlist from store
+    this.props.getCurrentUser();
     this.props.getPastRecipesFromStore();
     this.props.getWishListFromStore();
-    const { pastRecipes, wishList } = this.props;
+    const { currentUser, pastRecipes, wishList } = this.props;
+
+    let isLoggedIn;
+    let doMyRecipesExist;
+    let doPastRecipesExists;
+    let doWishListExists;
+    let isLoading = false;
 
     if (currentUser !== undefined && currentUser.id) {
+      // if current user is logged in,
       isLoggedIn = true;
 
-      // if current user is logged in, check if past recipe list exists in store
-      if (pastRecipes !== undefined) {
-        // check if it is an empty object
-        if (JSON.stringify(pastRecipes) !== JSON.stringify({})) {
-          doPastRecipesExists = true;
-        }
-      }
-      // if does not exist, retrieve it from database
-      else {
+      //if either pastRecipes or wishlist, not empty,
+      if (
+        JSON.stringify(pastRecipes) === JSON.stringify({}) &&
+        JSON.stringify(wishList) === JSON.stringify({})
+      ) {
+        isLoading === true;
+        // if still empty, retrieve past recipes and wishlist from databse
         this.props.getPastRecipesThunk(currentUser.id);
-      }
-
-      // if current user is logged in, check if wishlist exists in store
-      if (wishList !== undefined) {
-        // check if it is an empty object
-        if (JSON.stringify(wishList) !== JSON.stringify({})) {
-          doWishListExists = true;
-        }
-      }
-      // if does not exist, retrieve it from database
-      else {
         this.props.getWishListThunk(currentUser.id);
       }
+      // check if it has more than 'recipe0'
+      if (Object.keys(pastRecipes).length > 1) {
+        doPastRecipesExists = true;
+      } else {
+        doPastRecipesExists = false;
+      }
 
-      // my recipes exist, if at least one exists
+      // check if it has more than 'recipe0'
+      if (Object.keys(wishList).length > 1) {
+        doWishListExists = true;
+      } else {
+        doWishListExists = false;
+      }
+
+      // My Recipes exist, if at least one exists
       if (doPastRecipesExists === true || doWishListExists === true) {
         doMyRecipesExist = true;
+      } else {
+        doMyRecipesExist = false;
       }
+    } else {
+      isLoggedIn = false;
     }
 
     return (
@@ -76,14 +118,42 @@ class MyRecipesScreen extends React.Component {
               <Text style={styles.loginButtonText}>Login or Sign-Up</Text>
             </TouchableOpacity>
           </View>
+        ) : isLoading === true ? (
+          <View>
+            <Text style={styles.messageLine2}>Loading...</Text>
+          </View>
         ) : doMyRecipesExist === false ? (
           <View>
             <Text style={styles.messageLine1}>No Recipes to Show!</Text>
             <Text style={styles.messageLine2}>Please Add Recipes</Text>
           </View>
-        ) : (
-          <Text style={styles.listTitle}>Your Recipes</Text>
-        )}
+        ) : doPastRecipesExists === true && doWishListExists === true ? (
+          <View>
+            <Text style={styles.listTitle}>Your Past Recipes</Text>
+            <ScrollView>
+              <RecipeList allRecipes={Object.values(pastRecipes)} />
+            </ScrollView>
+
+            <Text style={styles.listTitle}>Your Wish List</Text>
+            <ScrollView>
+              <RecipeList allRecipes={Object.values(wishList)} />
+            </ScrollView>
+          </View>
+        ) : doPastRecipesExists === true ? (
+          <View>
+            <Text style={styles.listTitle}>Your Past Recipes</Text>
+            <ScrollView>
+              <RecipeList allRecipes={Object.values(pastRecipes)} />
+            </ScrollView>
+          </View>
+        ) : state.doWishListExists === true ? (
+          <View>
+            <Text style={styles.listTitle}>Your Wish List</Text>
+            <ScrollView>
+              <RecipeList allRecipes={Object.values(wishList)} />
+            </ScrollView>
+          </View>
+        ) : null}
       </View>
     );
   }
@@ -142,8 +212,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   listTitle: {
+    marginTop: 15,
+    marginBottom: 15,
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#52809a',
   },
 });
 
