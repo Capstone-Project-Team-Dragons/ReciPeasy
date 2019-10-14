@@ -218,7 +218,6 @@ export const removeFromWishListThunk = (userId, recipeId, recipeTitle, recipeIma
         .doc(`${recipeId}`)
         .delete()
         .then(function() {
-          //console.log(`recipe: ${recipeId} successfully deleted!`);
         })
         .catch(function(error) {
           console.error("Error removing document: ", error);

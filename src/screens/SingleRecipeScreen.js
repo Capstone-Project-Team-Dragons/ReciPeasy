@@ -51,7 +51,6 @@ class SingleRecipeScreen extends React.Component {
     
       if (isExsits){
         // alreay exists
-        //alert(`Recipe: ${title} already exists in your Wish List.`);
         Toast.show({
           text: `${title} already exists in your Wish List!`,
           buttonText: 'Okay',
@@ -134,7 +133,7 @@ class SingleRecipeScreen extends React.Component {
 
         <FlatList
           data={recipe.missedIngredients}
-          keyExtractor={(item, index) => 'key' + index}
+          keyExtractor={(item, index) => 'key6' + index}
           renderItem={({ item, index }) => {
             return (
                 <View style={styles.container}>

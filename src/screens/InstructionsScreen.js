@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import InstructionList from '../components/InstructionList';
-import { addOrientationChangeListener } from 'expo/build/ScreenOrientation/ScreenOrientation';
 
 const InstructionScreen = ({ navigation}) => {
     const addtionalInfo = navigation.getParam('addtionalInfo');
@@ -14,7 +13,7 @@ const InstructionScreen = ({ navigation}) => {
             </View>
             <FlatList
                 data={addtionalInfo["analyzedInstructions"]}
-                keyExtractor={(item, index) => 'key2'+index}
+                keyExtractor={(item, index) => 'key2'+ index}
                 renderItem={({ item, index }) => {
                     return ( <InstructionList allInstructions={item} /> );
                     }

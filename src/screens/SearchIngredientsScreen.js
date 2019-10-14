@@ -230,7 +230,6 @@ const styles = StyleSheet.create({
   },
   clearSearchResultsButton: {
     backgroundColor: '#ff8989',
-    // marginHorizontal: 50,
     marginTop: 10,
     borderRadius: 5,
     flexDirection: 'row',
@@ -256,7 +255,6 @@ const styles = StyleSheet.create({
   },
   barcodeButton: {
     width: 200,
-    // color: '#F7E9D0',
     marginBottom: 5,
     marginLeft: 15,
     alignItems: 'center',

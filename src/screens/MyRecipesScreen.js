@@ -146,7 +146,7 @@ class MyRecipesScreen extends React.PureComponent {
               <RecipeList allRecipes={Object.values(pastRecipes)} />
             </ScrollView>
           </View>
-        ) : state.doWishListExists === true ? (
+        ) : doWishListExists === true ? (
           <View>
             <Text style={styles.listTitle}>Your Wish List</Text>
             <ScrollView>

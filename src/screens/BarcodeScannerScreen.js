@@ -42,7 +42,6 @@ const BarcodeScannerScreen = ({ navigation }) => {
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
     searchBarcodeApi(data);
-    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
   useEffect(() => {

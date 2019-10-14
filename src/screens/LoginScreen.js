@@ -89,9 +89,6 @@ class Login extends React.Component {
       <ImageBackground source={require('../screens/ingredientsBackground.jpg')} style={styles.imageStyle}>
         <Text style={styles.loginHeader}>Login or Sign-up with Your Email</Text>
         <View style={styles.container}>
-          {/* {this.state.errorMessage && (
-            <Text style={{ color: 'blue' }}>{this.state.errorMessage}</Text>
-          )} */}
           <TextInput
             style={styles.textInput}
             autoCapitalize="none"
@@ -144,7 +141,6 @@ const styles = StyleSheet.create({
   container: {
     height: 40,
     flex: 1,
-    // flexDirection: 'column',
     alignItems: 'center',
     marginLeft: 20,
     marginRight: 20,

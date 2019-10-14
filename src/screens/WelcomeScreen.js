@@ -2,13 +2,11 @@ import React from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
-  Image,
   StyleSheet,
   ImageBackground,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Header, Content, Button } from 'native-base';
+import { Button } from 'native-base';
 import {
   updateCurrentUser,
   getCurrentUser,
