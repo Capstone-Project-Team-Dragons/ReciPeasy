@@ -15,6 +15,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
   const [ingredients, setIngredients] = useState([]);
   const [currIngredient, setCurrIngredient] = useState('');
   const [recipes, setRecipes] = useState([]);
+  const [enableSearch, setEnableSearch] = useState(false);
 
   // Search Spoonacular API to retrieve the "Recipes List" (Array).
   const searchRecipesApi = async ingreds => {
@@ -33,6 +34,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
           }
         );
         setRecipes(data);
+        setEnableSearch(false);
       } catch (error) {
         console.log('Error! ', error);
       }
@@ -95,15 +97,19 @@ const SearchIngredientsScreen = ({ navigation }) => {
   // A handler when user wants to "Clear Search Results".
   const clearSearchResults = () => {
     // Make Recipes List" empty.
+    // enable find recipes button when recipe list is empty
+    setEnableSearch(true);
     setRecipes([]);
   };
 
-  //Call searchRecipesApi when component is first rendered
-  //useEffect hook that passes a function that we want to run only once,
+  //this is called after every render if the array is empty --> useEffect hook that passes a function that we want to run only once,
   //or depending on if the values in the array change
   useEffect(() => {
-    searchRecipesApi([]);
-  }, []);
+    //if ingredients changes (and length is greater than 0), enable the find recipes button
+    if(ingredients.length > 0) {
+      setEnableSearch(true);
+    }
+  }, [ingredients]);
 
   return (
     <View>
@@ -111,14 +117,8 @@ const SearchIngredientsScreen = ({ navigation }) => {
         <SearchBar
           currIngredient={currIngredient}
           onTermChange={newIngred => setCurrIngredient(newIngred)}
+          onTermSubmit={() => submitHandler(currIngredient)}
         />
-        <Button 
-          rounded dark
-          style={styles.addButton}
-          onPress={() => submitHandler(currIngredient)}
-        >
-          <Text style={styles.buttonText}>Add</Text>
-        </Button>
       </View>
 
       <Button
@@ -126,7 +126,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
         style={styles.barcodeButton}
         onPress={() => navigation.navigate('BarcodeScanner')}
       >
-        <Text style={styles.buttonText}>Or Scan Ingredient's Barcode</Text>
+        <Text style={styles.barcodeText}>Scan Ingredient's Barcode</Text>
       </Button>
 
       <View>
@@ -154,27 +154,53 @@ const SearchIngredientsScreen = ({ navigation }) => {
       </View>
 
       <View style={{flexDirection: "row"}}>
-        <TouchableOpacity
-          horizontal={true}
-          style={styles.searchRecipeButton}
-          onPress={() => searchRecipesApi(ingredients)}
-        >
-          <Text style={styles.barcodeText}>Find Recipes</Text>
-        </TouchableOpacity>
-        {recipes.length > 0 ? (
-          <View>
-            <TouchableOpacity
-              horizontal={true}
-              style={styles.clearSearchResultsButton}
-              onPress={() => clearSearchResults()}
-            >
-              <Text style={styles.clearSearchResultsButtonText}>
-                Clear Search Results
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ) : null }
+          {
+            enableSearch === true ?
+              (
+                <Button
+                  rounded dark
+                  style={styles.searchRecipeButton}
+                  onPress={() => searchRecipesApi(ingredients)}
+                >
+                  <Text style={styles.searchButtonText}>Find Recipes</Text>
+                </Button>
+              )
+              : (
+                <Button
+                  disabled rounded
+                  style={styles.searchRecipeButton}
+                  onPress={() => searchRecipesApi(ingredients)}
+                >
+                  <Text style={styles.searchButtonText}>Find Recipes</Text>
+                </Button>
+              )
+          }
+
+        {recipes.length > 0 ? 
+          (
+            <View>
+              <Button
+                rounded danger
+                style={styles.clearSearchResultsButton}
+                onPress={() => clearSearchResults()}
+              >
+                <Text style={styles.clearSearchResultsButtonText}>Clear Search Results</Text>
+              </Button>
+
+              {/* <TouchableOpacity
+                horizontal={true}
+                style={styles.clearSearchResultsButton}
+                onPress={() => clearSearchResults()}
+              >
+                <Text style={styles.clearSearchResultsButtonText}>
+                  Clear Search Results
+                </Text>
+              </TouchableOpacity> */}
+            </View>
+          ) : null 
+        }
       </View>
+      
       <View>
         <ScrollView style={{height: 500}}>
             <RecipeList allRecipes={recipes} />
@@ -211,7 +237,6 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   searchRecipeButton: {
-    backgroundColor: '#66ccff',
     height: 40,
     borderRadius: 5,
     marginHorizontal: 35,
@@ -223,13 +248,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: 'white',
-  },
   clearSearchResultsButton: {
-    backgroundColor: '#ff8989',
     marginTop: 10,
     borderRadius: 5,
     flexDirection: 'row',
@@ -242,7 +261,7 @@ const styles = StyleSheet.create({
   clearSearchResultsButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'grey',
+    color: '#F2C04C',
     textAlign: 'center',
   },
   addButton: {
@@ -260,8 +279,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  searchButtonText: {
+    color: '#F2C04C',
+    fontSize: 16,
+    fontWeight: 'bold'
+  },  
   barcodeText: {
-    fontSize: 16
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#F2C04C',
   }
 });
 
