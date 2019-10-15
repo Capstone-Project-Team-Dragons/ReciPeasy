@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: '#F2C04C',
+    fontWeight: '600'
   },
   searchButtonText: {
     fontSize: 18,

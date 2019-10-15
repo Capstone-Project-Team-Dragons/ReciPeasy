@@ -104,22 +104,24 @@ class Login extends React.Component {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
-  
-          <Button
-            rounded success
-            style={styles.button} 
-            onPress={() => this.handleLogin()} 
-          > 
-            <Text style={styles.buttonText}>Login</Text>
-          </Button>
 
-          <Button
-            rounded info
-            style={styles.button} 
-            onPress={() => this.handleSignUp()}
-          > 
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </Button>
+          <View style={{flexDirection: 'row'}}>
+            <Button
+              rounded success
+              style={styles.button} 
+              onPress={() => this.handleLogin()} 
+            > 
+              <Text style={styles.buttonText}>Login</Text>
+            </Button>
+
+            <Button
+              rounded info
+              style={styles.button} 
+              onPress={() => this.handleSignUp()}
+            > 
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </Button>
+          </View>
         </View>
     </ImageBackground>
     );
@@ -171,13 +173,15 @@ const styles = StyleSheet.create({
   button: {
     width: 125,
     color: '#F7E9D0',
-    marginTop: 5,
+    marginTop: 15,
+    marginLeft: 10,
     marginBottom: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     fontSize: 18,
+    fontWeight: 'bold',
     color: '#F2C04C'
   },
 });

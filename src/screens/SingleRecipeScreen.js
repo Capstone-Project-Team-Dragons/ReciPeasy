@@ -92,6 +92,7 @@ class SingleRecipeScreen extends React.Component {
   render() {
     const { currentUser } = this.props;
     const recipe = this.props.navigation.getParam('recipe');
+    console.log('recipe', recipe)
     let isLoggedIn = false;
     if (currentUser !== undefined && currentUser.id) {
       isLoggedIn = true;
@@ -133,7 +134,7 @@ class SingleRecipeScreen extends React.Component {
 
         <FlatList
           data={recipe.missedIngredients}
-          keyExtractor={(item, index) => 'key6' + index}
+          keyExtractor={(item, index) => 'key12' + index}
           renderItem={({ item, index }) => {
             return (
                 <View style={styles.container}>
