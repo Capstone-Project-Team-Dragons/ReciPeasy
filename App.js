@@ -1,7 +1,7 @@
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
-import { Root } from "native-base";
+import { Root } from 'native-base';
 
 import React from 'react';
 import { Provider } from 'react-redux';
@@ -47,7 +47,6 @@ const SearchRecipesStack = createStackNavigator(
 const MyRecipesStack = createStackNavigator(
   {
     MyRecipes: MyRecipesScreen,
-    Login: LoginScreen,
   },
   {
     initialRouteName: 'MyRecipes',
