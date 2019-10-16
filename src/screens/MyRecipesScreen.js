@@ -1,8 +1,10 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
 import { connect } from 'react-redux';
+
+import styles from '../styles/MyRecipeScreenStyle';
 
 import { getCurrentUser } from '../store/usersReducer';
 import {
@@ -142,6 +144,7 @@ class MyRecipesScreen extends React.PureComponent {
         
         ) : displayFlags.doPastRecipesExists === true ? (
           <View>
+            <Text>No Wish List!</Text>
             <Text style={styles.listTitle}>Your Past Recipes</Text>
             <ScrollView>
               <UserPastRecipesList allRecipes={pastRecipes} />
@@ -150,6 +153,7 @@ class MyRecipesScreen extends React.PureComponent {
         
         ) : displayFlags.doWishListExists === true ? (
           <View>
+            <Text>No Past Recipes!</Text>
             <Text style={styles.listTitle}>Your Wish List</Text>
             <ScrollView>
               <UserWishList allRecipes={wishList} />
@@ -179,52 +183,6 @@ const mapDispatchToProps = dispatch => {
     getWishListThunk: userId => dispatch(getWishListThunk(userId)),
   };
 };
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  messageLine1: {
-    marginTop: 15,
-    fontSize: 22,
-    fontWeight: 'bold',
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    textDecorationLine: 'underline'
-  },
-  messageLine2: {
-    marginTop: 15,
-    marginBottom: 15,
-    fontSize: 20,
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  loginButton: {
-    height: 40,
-    borderRadius: 5,
-    marginHorizontal: 50,
-    marginTop: 10,
-    flexDirection: 'row',
-    marginBottom: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  loginButtonText: {
-    fontSize: 18,
-    color: '#F2C04C',
-    fontWeight: 'bold',
-  },
-  listTitle: {
-    marginTop: 15,
-    marginBottom: 15,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#52809a',
-  },
-});
 
 export default connect(
   mapStateToProps,

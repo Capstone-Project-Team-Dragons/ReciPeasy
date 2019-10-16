@@ -2,15 +2,15 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   FlatList,
   Image,
-  TouchableOpacity,
 } from 'react-native';
 import { Toast, Button } from 'native-base';
 import { SPOON_API } from 'react-native-dotenv';
 import spoonacular from '../api/spoonacular';
 import { connect } from 'react-redux';
+
+import styles from '../styles/SingleRecipeStyle';
 
 import { getCurrentUser } from '../store/usersReducer';
 import { addToPastRecipesThunk } from '../store/pastRecipesReducer';
@@ -287,56 +287,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(removeFromWishListThunk(userId, recipeId)),
   };
 };
-
-const styles = StyleSheet.create({
-  //by default an image wants to collapse itself
-  container: {
-    marginLeft: 15,
-  },
-  recipeName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginLeft: 10,
-    marginTop: 10,
-  },
-  displayList: {
-    marginTop: 5,
-    marginLeft: 10,
-  },
-  imageStyle: {
-    height: 200,
-    width: 320,
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 15,
-    marginBottom: 15,
-  },
-  recipeNameTitle: {
-    fontWeight: 'bold',
-    margin: 10,
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  recipeIngredientName: {
-    fontSize: 14,
-    marginLeft: 20,
-  },
-  button: {
-    height: 30,
-    borderRadius: 5,
-    marginHorizontal: 100,
-    marginTop: 10,
-    flexDirection: 'row',
-    marginBottom: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#F2C04C',
-  },
-});
 
 export default connect(
   mapStateToProps,
