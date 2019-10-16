@@ -2,17 +2,15 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ImageBackground,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { Button } from 'native-base';
-import {
-  updateCurrentUser,
-  getCurrentUser,
-  clearPastRecipesFromStore,
-  clearWishListFromStore,
-} from '../store/actionCreators';
+import { Button, Toast } from 'native-base';
+import styles from '../styles/WelcomeScreenStyles'
+import { updateCurrentUser, getCurrentUser } from '../store/usersReducer';
+import { clearPastRecipesFromStore } from '../store/pastRecipesReducer';
+import { clearWishListFromStore } from '../store/wishListReducer';
+
 
 class WelcomeScreen extends React.Component {
   constructor(props) {
@@ -31,7 +29,15 @@ class WelcomeScreen extends React.Component {
       this.props.currentUser.id,
       this.props.currentUser.email,
       'loggedOut'
-    );
+      );
+      
+      Toast.show({
+        text: `You have successfully logged out!`,
+        buttonText: 'Okay',
+        duration: 3000,
+        type: 'warning',
+      });
+
     this.props.clearPastRecipesFromStore();
     this.props.clearWishListFromStore();
   }
@@ -117,85 +123,6 @@ const mapDispatchToProps = dispatch => {
     clearWishListFromStore: () => dispatch(clearWishListFromStore()),
   };
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  welcomeHeader: {
-    height: 90,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 60,
-    marginBottom: 20,
-    alignItems: 'center',
-    borderRadius: 5,
-  },
-  welcomeHeaderText: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    color: '#F2C04C',
-  },
-  slogan: {
-    paddingTop: 15,
-    paddingBottom: 15,
-    fontSize: 16,
-    textAlignVertical: 'center',
-    textAlign: 'center',
-    fontStyle: 'italic',
-    color: '#F2C04C',
-  },
-  imageStyle: {
-    height: '100%',
-    width: '100%',
-  },
-  button: {
-    marginTop: 10,
-    width: 175,
-    color: '#F7E9D0',
-    marginBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  welcomeMessage: {
-    paddingTop: 15,
-    color: '#F7E9D0',
-    fontSize: 25,
-    textAlignVertical: 'center',
-    textAlign: 'center',
-  },
-  searchButton: {
-    marginTop: 20,
-    width: 330,
-    color: '#F7E9D0',
-    marginBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logOutButton: {
-    marginLeft: 80,
-    marginTop: 5,
-    width: 150,
-    color: '#F7E9D0',
-    marginBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#F2C04C',
-  },
-  searchButtonText: {
-    fontSize: 18,
-    color: '#dfa110',
-    fontWeight: 'bold',
-  },
-  logoutButtonText: {
-    fontSize: 18,
-    color: '#dfa110',
-  },
-});
 
 export default connect(
   mapStateToProps,

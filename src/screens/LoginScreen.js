@@ -1,11 +1,12 @@
 import React from 'react';
 import * as firebase from 'firebase';
 import { StyleSheet, Text, TextInput, View, ImageBackground } from 'react-native';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
-import { Container, Header, Content, Button } from 'native-base';
+import styles from '../styles/LoginScreenStyles'
+import { Button } from 'native-base';
+
 import db from '../api/db/database';
 import { connect } from 'react-redux';
-import { updateCurrentUser } from '../store/actionCreators';
+import { updateCurrentUser } from '../store/usersReducer';
 
 class Login extends React.Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class Login extends React.Component {
     this.handleSignUp = this.handleSignUp.bind(this);
   }
 
-
   handleLogin = () => {
     try {
       firebase
@@ -32,11 +32,11 @@ class Login extends React.Component {
             'loggedIn'
           );
           this.props.navigation.navigate('Welcome');
-        }).
-        catch((err) => {
+        })
+        .catch(err => {
           const errmsg = err.message;
-          alert(errmsg)
-          this.setState({errorMessage: errmsg});
+          alert(errmsg);
+          this.setState({ errorMessage: errmsg });
         });
     } catch (error) {
       const errorMessage = error.message;
@@ -58,13 +58,13 @@ class Login extends React.Component {
             .doc(`${res.user.uid}`)
             .collection('pastRecipes')
             .doc('recipe0')
-            .set({ recipeId: 0 });
+            .set({ id: 0 });
 
           db.collection('users')
             .doc(`${res.user.uid}`)
             .collection('wishList')
             .doc('recipe0')
-            .set({ recipeId: 0 });
+            .set({ id: 0 });
 
           this.props.updateCurrentUser(
             res.user.uid,
@@ -72,11 +72,11 @@ class Login extends React.Component {
             'loggedIn'
           );
           this.props.navigation.navigate('Welcome');
-        }).
-        catch((err) => {
+        })
+        .catch(err => {
           const errmsg = err.message;
-          alert(errmsg)
-          this.setState({errorMessage: errmsg});
+          alert(errmsg);
+          this.setState({ errorMessage: errmsg });
         });
     } catch (error) {
       alert(error.toString(error));
@@ -86,7 +86,10 @@ class Login extends React.Component {
 
   render() {
     return (
-      <ImageBackground source={require('../screens/ingredientsBackground.jpg')} style={styles.imageStyle}>
+      <ImageBackground
+        source={require('../screens/ingredientsBackground.jpg')}
+        style={styles.imageStyle}
+      >
         <Text style={styles.loginHeader}>Login or Sign-up with Your Email</Text>
         <View style={styles.container}>
           <TextInput
@@ -104,24 +107,27 @@ class Login extends React.Component {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
-  
-          <Button
-            rounded success
-            style={styles.button} 
-            onPress={() => this.handleLogin()} 
-          > 
-            <Text style={styles.buttonText}>Login</Text>
-          </Button>
 
-          <Button
-            rounded info
-            style={styles.button} 
-            onPress={() => this.handleSignUp()}
-          > 
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </Button>
+          <View style={{flexDirection: 'row'}}>
+            <Button
+              rounded success
+              style={styles.button} 
+              onPress={() => this.handleLogin()} 
+            > 
+              <Text style={styles.buttonText}>Login</Text>
+            </Button>
+
+            <Button
+              rounded info
+              style={styles.button} 
+              onPress={() => this.handleSignUp()}
+            > 
+              <Text style={styles.buttonText}>Sign Up</Text>
+            </Button>
+          </View>
+
         </View>
-    </ImageBackground>
+      </ImageBackground>
     );
   }
 }
@@ -136,51 +142,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateCurrentUser(userId, userEmail, status)),
   };
 };
-
-const styles = StyleSheet.create({
-  container: {
-    height: 40,
-    flex: 1,
-    alignItems: 'center',
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 30,
-    marginBottom: 400,
-  },
-  imageStyle: {
-    height: '100%',
-    width: '100%',
-  },
-  loginHeader: {
-    paddingTop: 70,
-    fontWeight: 'bold',
-    color: '#F2C04C',
-    fontSize: 18,
-    textAlignVertical: "center",
-    textAlign: "center",
-  },
-  textInput: {
-    backgroundColor: 'white',
-    height: 40,
-    width: '90%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 8,
-    fontWeight: 'bold'
-  },
-  button: {
-    width: 125,
-    color: '#F7E9D0',
-    marginTop: 5,
-    marginBottom: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#F2C04C'
-  },
-});
 
 export default connect(
   mapStateToProps,

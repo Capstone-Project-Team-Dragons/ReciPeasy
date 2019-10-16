@@ -2,10 +2,9 @@ import React from 'react';
 import {
     View, 
     Text, 
-    StyleSheet,
     Image, 
-    TouchableOpacity 
 } from 'react-native';
+import styles from '../styles/RecipeDetailStyle'
 
 const RecipeDetail = ({ recipe }) => {
     return (
@@ -16,24 +15,5 @@ const RecipeDetail = ({ recipe }) => {
     )
 
 }
-
-const styles = StyleSheet.create({
-    //by default an image wants to collapse itself
-    container: {
-        marginLeft: 15
-    },
-    recipeName: {
-        fontWeight: "bold",
-        fontSize: 16,
-        textAlign: 'center'
-    },
-    imageStyle: {
-        height: 120,
-        width: 250,
-        borderRadius: 5,
-        marginLeft: 45
-    }
-});
-
 
 export default RecipeDetail;

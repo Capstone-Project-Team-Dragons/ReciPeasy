@@ -1,31 +1,26 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList } from 'react-native';
+import styles from '../styles/InstructionListStyle';
 
 const InstructionList = ({allInstructions}) => {
     return (
         <View style={styles.container}>
             <FlatList
-                    data={allInstructions["steps"]}
-                    keyExtractor={(item, index) => 'key3'+index}
-                    renderItem={({ item, index }) => {
-                          return ( 
-                                <Text style={styles.text}>{`Step ${index+1}: `}{item.step}</Text>
+                data={allInstructions["steps"]}
+                keyExtractor={(item, index) => 'key3'+index}
+                renderItem={({ item, index }) => {
+                    return (
+                        <View>
+                            <Text style={styles.label}>{`Step ${index+1}: `}</Text>
+                            <Text style={styles.text}>{item.step}</Text>
+                        </View> 
                                     
-                          );
-                }} />
+                    );
+                }} 
+            />
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        marginLeft: 15
-    },
-    text: {
-        fontSize: 14,
-        margin: 5
-    }
-});
 
 export default InstructionList;
 
