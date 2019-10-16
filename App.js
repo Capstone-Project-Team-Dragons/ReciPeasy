@@ -47,6 +47,7 @@ const SearchRecipesStack = createStackNavigator(
 const MyRecipesStack = createStackNavigator(
   {
     MyRecipes: MyRecipesScreen,
+    SingleRecipe: SingleRecipeScreen,
   },
   {
     initialRouteName: 'MyRecipes',

@@ -58,13 +58,13 @@ class Login extends React.Component {
             .doc(`${res.user.uid}`)
             .collection('pastRecipes')
             .doc('recipe0')
-            .set({ recipeId: 0 });
+            .set({ id: 0 });
 
           db.collection('users')
             .doc(`${res.user.uid}`)
             .collection('wishList')
             .doc('recipe0')
-            .set({ recipeId: 0 });
+            .set({ id: 0 });
 
           this.props.updateCurrentUser(
             res.user.uid,

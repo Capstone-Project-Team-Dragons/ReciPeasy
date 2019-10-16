@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import InstructionList from '../components/InstructionList';
+import styles from '../styles/InstructionsScreenStyle';
 
 const InstructionScreen = ({ navigation}) => {
     const addtionalInfo = navigation.getParam('addtionalInfo');
