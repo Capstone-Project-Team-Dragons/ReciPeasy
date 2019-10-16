@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList } from 'react-native';
+import styles from '../styles/InstructionListStyle';
 
 const InstructionList = ({allInstructions}) => {
     return (
@@ -16,16 +17,6 @@ const InstructionList = ({allInstructions}) => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        marginLeft: 15
-    },
-    text: {
-        fontSize: 14,
-        margin: 5
-    }
-});
 
 export default InstructionList;
 
