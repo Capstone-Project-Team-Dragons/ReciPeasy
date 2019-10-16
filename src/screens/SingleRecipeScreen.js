@@ -22,20 +22,38 @@ import {
 } from '../store/wishListReducer';
 
 class SingleRecipeScreen extends React.Component {
+  isMounted = false;
   constructor(props) {
     super(props);
+    this.state = {
+      additionalInfo: [],
+    }
     this.searchInstructionAndAddiInfoData = this.searchInstructionAndAddiInfoData.bind(
       this
     );
     this.addToWishList = this.addToWishList.bind(this);
     this.removeFromWishList = this.removeFromWishList.bind(this);
     this.displayLogicHandler = this.displayLogicHandler.bind(this);
+    this.addToPastRecipes = this.addToPastRecipes.bind(this);
   }
 
-  searchInstructionAndAddiInfoData = async (userId, recipeId, isLoggedIn) => {
-    const recipe = this.props.navigation.getParam('recipe');
+  searchInstructionAndAddiInfoData = async (recipeId) => {
     let url = `/${recipeId}/information?apiKey=${SPOON_API}`;
-    const addtionalInfoData = await spoonacular.get(url);
+    try {
+      const additionalInfoData = await spoonacular.get(url);
+      console.log('Entire Additional Info', additionalInfoData)
+      if(additionalInfoData && additionalInfoData.data["analyzedInstructions"].length > 0) {
+        this.setState({
+          additionalInfo: additionalInfoData.data["analyzedInstructions"]
+        })
+      } 
+    } catch (error) {
+      console.log('Error', error)
+    }
+  };
+
+  addToPastRecipes(userId, additionalInfo, isLoggedIn) {
+    const recipe = this.props.navigation.getParam('recipe');
     if (isLoggedIn === true) {
       this.props.addToPastRecipesThunk(
         userId,
@@ -44,10 +62,12 @@ class SingleRecipeScreen extends React.Component {
         recipe.image
       );
     }
+
     this.props.navigation.navigate('Instruction', {
-      addtionalInfo: addtionalInfoData,
+      additionalInfo: additionalInfo,
     });
-  };
+
+  }
 
   addToWishList = async (
     userId,
@@ -124,11 +144,24 @@ class SingleRecipeScreen extends React.Component {
     return formatted;
   };
 
+  componentDidMount() {
+    this.isMounted = true;
+
+    const recipe = this.props.navigation.getParam('recipe');
+    this.searchInstructionAndAddiInfoData(recipe.id);
+  }
+
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
+
   render() {
     const { currentUser } = this.props;
     const recipe = this.props.navigation.getParam('recipe');
 
     let displayFlags = this.displayLogicHandler(recipe.id);
+
+    console.log('state', this.state)
 
     return (
       <View style={styles.container}>
@@ -243,20 +276,25 @@ class SingleRecipeScreen extends React.Component {
           </View>
         )}
 
-        <Button
-          rounded
-          dark
-          style={styles.button}
-          onPress={() =>
-            this.searchInstructionAndAddiInfoData(
-              currentUser.id,
-              recipe.id,
-              displayFlags.isLoggedIn
-            )
-          }
-        >
-          <Text style={styles.buttonText}>Instruction Details</Text>
-        </Button>
+        {
+          this.state.additionalInfo.length > 0 ? 
+            (
+              <Button
+                rounded
+                dark
+                style={styles.button}
+                onPress={() =>
+                  this.addToPastRecipes(
+                    currentUser.id,
+                    this.state.additionalInfo,
+                    displayFlags.isLoggedIn
+                  )
+                }
+              >
+                <Text style={styles.buttonText}>Instruction Details</Text>
+              </Button>
+            ) : null
+        }
       </View>
     );
   }
