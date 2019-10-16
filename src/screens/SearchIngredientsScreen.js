@@ -47,10 +47,10 @@ const SearchIngredientsScreen = ({ navigation }) => {
     }
   };
 
-  formatIngredientName = (ingredient) => {
+  formatIngredientName = ingredient => {
     let formatted = ingredient[0].toUpperCase() + ingredient.slice(1);
     return formatted;
-  }
+  };
 
    // If user scanned barcode of a product, add the product name to "Ingredients List" (Array)
   const barcodeHandler = (barcodeProductName) => {
@@ -64,7 +64,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
   // A handler when an ingredient is submitted by user, either manually or by scanning barcode.
   const submitHandler = cIngredient => {
     let currItem;
-    if(cIngredient !== '') {
+    if (cIngredient !== '') {
       currItem = formatIngredientName(cIngredient.trim().toLowerCase());
 
       if (currItem.length > 0) {
@@ -76,14 +76,13 @@ const SearchIngredientsScreen = ({ navigation }) => {
           setDataFromBarcode('');
         }
       }
-
     } else {
       Toast.show({
         text: `Please type in an ingredient, cannot be empty!`,
         buttonText: 'Okay',
         duration: 3000,
-        type: 'warning'
-      })
+        type: 'warning',
+      });
     }
   };
 
@@ -106,15 +105,14 @@ const SearchIngredientsScreen = ({ navigation }) => {
   //or depending on if the values in the array change
   useEffect(() => {
     //if ingredients changes (and length is greater than 0), enable the find recipes button
-    console.log('In Use Effect')
-    if(ingredients.length > 0) {
+    if (ingredients.length > 0) {
       setEnableSearch(true);
     }
   }, [ingredients, dataFromBarcode]);
 
   return (
     <View>
-      <View style={{flexDirection: "row"}}>
+      <View style={{ flexDirection: 'row' }}>
         <SearchBar
           currIngredient={currIngredient}
           onTermChange={newIngred => setCurrIngredient(newIngred)}
@@ -123,7 +121,8 @@ const SearchIngredientsScreen = ({ navigation }) => {
       </View>
 
       <Button
-        small primary
+        small
+        primary
         style={styles.barcodeButton}
         onPress={() => navigation.navigate('BarcodeScanner', {handleBarcode: (productName) => {barcodeHandler(productName)}})}
       >
@@ -142,11 +141,18 @@ const SearchIngredientsScreen = ({ navigation }) => {
                 <Text style={styles.displayItem}>{item}</Text>
 
                 <Button
-                  bordered danger
-                  style={{marginLeft: 15, width: 22, height: 22, alignItems: 'center', justifyContent: 'center'}}
+                  bordered
+                  danger
+                  style={{
+                    marginLeft: 15,
+                    width: 22,
+                    height: 22,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
                   onPress={() => removeIngredient(item)}
                 >
-                  <EvilIcons name='trash' color='red' size={13}/>
+                  <EvilIcons name="trash" color="red" size={13} />
                 </Button>
               </View>
             );
@@ -154,28 +160,26 @@ const SearchIngredientsScreen = ({ navigation }) => {
         />
       </View>
 
-      <View style={{flexDirection: "row"}}>
-          {
-            enableSearch === true ?
-              (
-                <Button
-                  rounded dark
-                  style={styles.searchRecipeButton}
-                  onPress={() => searchRecipesApi(ingredients)}
-                >
-                  <Text style={styles.searchButtonText}>Find Recipes</Text>
-                </Button>
-              )
-              : (
-                <Button
-                  disabled rounded
-                  style={styles.searchRecipeButton}
-                  onPress={() => searchRecipesApi(ingredients)}
-                >
-                  <Text style={styles.searchButtonText}>Find Recipes</Text>
-                </Button>
-              )
-          }
+      <View style={{ flexDirection: 'row' }}>
+        {enableSearch === true ? (
+          <Button
+            rounded
+            dark
+            style={styles.searchRecipeButton}
+            onPress={() => searchRecipesApi(ingredients)}
+          >
+            <Text style={styles.searchButtonText}>Find Recipes</Text>
+          </Button>
+        ) : (
+          <Button
+            disabled
+            rounded
+            style={styles.searchRecipeButton}
+            onPress={() => searchRecipesApi(ingredients)}
+          >
+            <Text style={styles.searchButtonText}>Find Recipes</Text>
+          </Button>
+        )}
 
         {recipes.length > 0 ? 
           (
@@ -190,11 +194,12 @@ const SearchIngredientsScreen = ({ navigation }) => {
             </View>
           ) : null 
         }
+
       </View>
-      
+
       <View>
-        <ScrollView style={{height: 500}}>
-            <RecipeList allRecipes={recipes} />
+        <ScrollView style={{ height: 500 }}>
+          <RecipeList allRecipes={recipes} />
         </ScrollView>
       </View>
     </View>

@@ -7,12 +7,10 @@ import {
 import { connect } from 'react-redux';
 import { Button } from 'native-base';
 import styles from '../styles/WelcomeScreenStyles'
-import {
-  updateCurrentUser,
-  getCurrentUser,
-  clearPastRecipesFromStore,
-  clearWishListFromStore,
-} from '../store/actionCreators';
+import { updateCurrentUser, getCurrentUser } from '../store/usersReducer';
+import { clearPastRecipesFromStore } from '../store/pastRecipesReducer';
+import { clearWishListFromStore } from '../store/wishListReducer';
+
 
 class WelcomeScreen extends React.Component {
   constructor(props) {

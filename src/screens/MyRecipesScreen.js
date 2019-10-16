@@ -3,15 +3,20 @@ import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'native-base';
 import { connect } from 'react-redux';
+
+import { getCurrentUser } from '../store/usersReducer';
 import {
-  getCurrentUser,
   getPastRecipesFromStore,
   getPastRecipesThunk,
+} from '../store/pastRecipesReducer';
+import {
   getWishListFromStore,
   getWishListThunk,
-} from '../store/actionCreators';
+} from '../store/wishListReducer';
+
 import UserPastRecipesList from '../components/UserPastRecipesList';
 import UserWishList from '../components/UserWishList';
+
 
 class MyRecipesScreen extends React.PureComponent {
   constructor(props) {
@@ -39,8 +44,8 @@ class MyRecipesScreen extends React.PureComponent {
 
       //If both, pastRecipes and wishlist, are empty,
       if (
-        JSON.stringify(pastRecipes) === JSON.stringify({}) &&
-        JSON.stringify(wishList) === JSON.stringify({})
+        JSON.stringify(pastRecipes) === JSON.stringify([]) &&
+        JSON.stringify(wishList) === JSON.stringify([])
       ) {
         // That means the data is still loading
         isLoading === true;
@@ -55,14 +60,14 @@ class MyRecipesScreen extends React.PureComponent {
       }
 
       // For past recipes, check if data has more than just 'recipe0' doc
-      if (Object.keys(pastRecipes).length > 1) {
+      if (pastRecipes.length > 1) {
         doPastRecipesExists = true;
       } else {
         doPastRecipesExists = false;
       }
 
       // For wish list, check if data has more than just 'recipe0' doc
-      if (Object.keys(wishList).length > 1) {
+      if (wishList.length > 1) {
         doWishListExists = true;
       } else {
         doWishListExists = false;
@@ -126,12 +131,12 @@ class MyRecipesScreen extends React.PureComponent {
           <View>
             <Text style={styles.listTitle}>Your Past Recipes</Text>
             <ScrollView>
-              <UserPastRecipesList allRecipes={Object.values(pastRecipes)} />
+              <UserPastRecipesList allRecipes={pastRecipes} />
             </ScrollView>
 
             <Text style={styles.listTitle}>Your Wish List</Text>
             <ScrollView>
-              <UserWishList allRecipes={Object.values(wishList)} />
+              <UserWishList allRecipes={wishList} />
             </ScrollView>
           </View>
         
@@ -139,7 +144,7 @@ class MyRecipesScreen extends React.PureComponent {
           <View>
             <Text style={styles.listTitle}>Your Past Recipes</Text>
             <ScrollView>
-              <UserPastRecipesList allRecipes={Object.values(pastRecipes)} />
+              <UserPastRecipesList allRecipes={pastRecipes} />
             </ScrollView>
           </View>
         
@@ -147,7 +152,7 @@ class MyRecipesScreen extends React.PureComponent {
           <View>
             <Text style={styles.listTitle}>Your Wish List</Text>
             <ScrollView>
-              <UserWishList allRecipes={Object.values(wishList)} />
+              <UserWishList allRecipes={wishList} />
             </ScrollView>
           </View>
 
