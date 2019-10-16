@@ -2,16 +2,16 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 15
+        marginLeft: 5
     },
     textTitle: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: "bold",
         margin: 5
     },
     addtional: {
-        marginLeft: 20,
-        marginRight: 20,
+        marginLeft: 5,
+        marginRight: 5,
         fontWeight: "bold",
         borderStyle: "solid",
         borderRadius: 5,

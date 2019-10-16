@@ -5,7 +5,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { Button } from 'native-base';
+import { Button, Toast } from 'native-base';
 import styles from '../styles/WelcomeScreenStyles'
 import { updateCurrentUser, getCurrentUser } from '../store/usersReducer';
 import { clearPastRecipesFromStore } from '../store/pastRecipesReducer';
@@ -29,7 +29,15 @@ class WelcomeScreen extends React.Component {
       this.props.currentUser.id,
       this.props.currentUser.email,
       'loggedOut'
-    );
+      );
+      
+      Toast.show({
+        text: `You have successfully logged out!`,
+        buttonText: 'Okay',
+        duration: 3000,
+        type: 'warning',
+      });
+
     this.props.clearPastRecipesFromStore();
     this.props.clearWishListFromStore();
   }

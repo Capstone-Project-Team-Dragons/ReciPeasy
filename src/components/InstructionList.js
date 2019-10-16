@@ -10,7 +10,7 @@ const InstructionList = ({allInstructions}) => {
                 keyExtractor={(item, index) => 'key3'+index}
                 renderItem={({ item, index }) => {
                     return (
-                        <View style={{flexDirection: 'row'}}>
+                        <View>
                             <Text style={styles.label}>{`Step ${index+1}: `}</Text>
                             <Text style={styles.text}>{item.step}</Text>
                         </View> 

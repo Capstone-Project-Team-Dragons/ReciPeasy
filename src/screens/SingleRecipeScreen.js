@@ -27,6 +27,8 @@ class SingleRecipeScreen extends React.Component {
     super(props);
     this.state = {
       additionalInfo: [],
+      prepTime: 0,
+      servings: 0
     }
     this.searchInstructionAndAddiInfoData = this.searchInstructionAndAddiInfoData.bind(
       this
@@ -41,9 +43,11 @@ class SingleRecipeScreen extends React.Component {
     let url = `/${recipeId}/information?apiKey=${SPOON_API}`;
     try {
       const additionalInfoData = await spoonacular.get(url);
-      console.log('Entire Additional Info', additionalInfoData)
+
       if(additionalInfoData && additionalInfoData.data["analyzedInstructions"].length > 0) {
         this.setState({
+          prepTime: additionalInfoData.data["readyInMinutes"],
+          servings: additionalInfoData.data["servings"],
           additionalInfo: additionalInfoData.data["analyzedInstructions"]
         })
       } 
@@ -52,8 +56,9 @@ class SingleRecipeScreen extends React.Component {
     }
   };
 
-  addToPastRecipes(userId, additionalInfo, isLoggedIn) {
+  addToPastRecipes(userId, isLoggedIn) {
     const recipe = this.props.navigation.getParam('recipe');
+
     if (isLoggedIn === true) {
       this.props.addToPastRecipesThunk(
         userId,
@@ -64,7 +69,9 @@ class SingleRecipeScreen extends React.Component {
     }
 
     this.props.navigation.navigate('Instruction', {
-      additionalInfo: additionalInfo,
+      additionalInfo: this.state.additionalInfo,
+      prepTime: this.state.prepTime,
+      servings: this.state.servings
     });
 
   }
@@ -160,8 +167,6 @@ class SingleRecipeScreen extends React.Component {
     const recipe = this.props.navigation.getParam('recipe');
 
     let displayFlags = this.displayLogicHandler(recipe.id);
-
-    console.log('state', this.state)
 
     return (
       <View style={styles.container}>
@@ -286,12 +291,11 @@ class SingleRecipeScreen extends React.Component {
                 onPress={() =>
                   this.addToPastRecipes(
                     currentUser.id,
-                    this.state.additionalInfo,
                     displayFlags.isLoggedIn
                   )
                 }
               >
-                <Text style={styles.buttonText}>Instruction Details</Text>
+                <Text style={styles.buttonText}>Recipe Instructions</Text>
               </Button>
             ) : null
         }
