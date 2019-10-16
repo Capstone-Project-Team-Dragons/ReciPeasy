@@ -94,7 +94,14 @@ function pastRecipesReducer(state = { pastRecipes: [] }, action) {
         title: action.recipeTitle,
         image: action.recipeImage,
       };
-      return { ...state, pastRecipes: [...state.pastRecipes, recipeObj] };
+      let recipeArr = state.pastRecipes.filter(
+        elemObj => elemObj.id === action.recipeId
+      );
+      if (recipeArr.length === 0) {
+        return { ...state, pastRecipes: [...state.pastRecipes, recipeObj] };
+      } else if (recipeArr.length === 1) {
+        return state;
+      }
     default:
       return state;
   }
