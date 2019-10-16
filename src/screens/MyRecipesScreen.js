@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button } from 'native-base';
+import { Button, Tabs, Tab } from 'native-base';
 import { connect } from 'react-redux';
 
 import styles from '../styles/MyRecipeScreenStyle';
@@ -131,33 +131,46 @@ class MyRecipesScreen extends React.PureComponent {
         ) : displayFlags.doPastRecipesExists === true &&
           displayFlags.doWishListExists === true ? (
           <View>
-            <Text style={styles.listTitle}>Your Past Recipes</Text>
-            <ScrollView>
-              <UserPastRecipesList allRecipes={pastRecipes} />
-            </ScrollView>
-
-            <Text style={styles.listTitle}>Your Wish List</Text>
-            <ScrollView>
-              <UserWishList allRecipes={wishList} />
-            </ScrollView>
+            <Tabs>
+              <Tab heading='Your Past Recipes'>
+                <ScrollView style={{ minHeight: 100 }}>
+                  <UserPastRecipesList allRecipes={pastRecipes} />
+                </ScrollView>
+              </Tab>
+              <Tab heading='Your Wish List'>
+                <ScrollView style={{ minHeight: 100 }}>
+                  <UserWishList allRecipes={wishList} />
+                </ScrollView>
+              </Tab>
+            </Tabs>
           </View>
         
         ) : displayFlags.doPastRecipesExists === true ? (
           <View>
-            <Text>No Wish List!</Text>
-            <Text style={styles.listTitle}>Your Past Recipes</Text>
-            <ScrollView>
-              <UserPastRecipesList allRecipes={pastRecipes} />
-            </ScrollView>
+            <Tabs>
+              <Tab heading='Your Past Recipes'>
+                <ScrollView style={{ minHeight: 100 }}>
+                  <UserPastRecipesList allRecipes={pastRecipes} />
+                </ScrollView>
+              </Tab>
+              <Tab heading='Your Wish List'>
+                <Text style={styles.messageLine1}>Currently There are No Recipes in your Wish List!</Text>
+              </Tab>
+            </Tabs>
           </View>
         
         ) : displayFlags.doWishListExists === true ? (
           <View>
-            <Text>No Past Recipes!</Text>
-            <Text style={styles.listTitle}>Your Wish List</Text>
-            <ScrollView>
-              <UserWishList allRecipes={wishList} />
-            </ScrollView>
+            <Tabs>
+              <Tab heading='Your Past Recipes'>
+                <Text style={styles.messageLine1}>Currently There are No Recipes in your Past Recipes!</Text>
+              </Tab>
+              <Tab heading='Your Wish List'>
+              <ScrollView style={{ minHeight: 100 }}>
+                  <UserWishList allRecipes={wishList} />
+              </ScrollView>
+              </Tab>
+            </Tabs>
           </View>
 
         ) : null}
