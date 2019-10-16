@@ -1,11 +1,17 @@
 import React from 'react';
 import * as firebase from 'firebase';
-import { StyleSheet, Text, TextInput, View, ImageBackground } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ImageBackground,
+} from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { Container, Header, Content, Button } from 'native-base';
 import db from '../api/db/database';
 import { connect } from 'react-redux';
-import { updateCurrentUser } from '../store/actionCreators';
+import { updateCurrentUser } from '../store/usersReducer';
 
 class Login extends React.Component {
   constructor(props) {
@@ -19,7 +25,6 @@ class Login extends React.Component {
     this.handleSignUp = this.handleSignUp.bind(this);
   }
 
-
   handleLogin = () => {
     try {
       firebase
@@ -32,11 +37,11 @@ class Login extends React.Component {
             'loggedIn'
           );
           this.props.navigation.navigate('Welcome');
-        }).
-        catch((err) => {
+        })
+        .catch(err => {
           const errmsg = err.message;
-          alert(errmsg)
-          this.setState({errorMessage: errmsg});
+          alert(errmsg);
+          this.setState({ errorMessage: errmsg });
         });
     } catch (error) {
       const errorMessage = error.message;
@@ -72,11 +77,11 @@ class Login extends React.Component {
             'loggedIn'
           );
           this.props.navigation.navigate('Welcome');
-        }).
-        catch((err) => {
+        })
+        .catch(err => {
           const errmsg = err.message;
-          alert(errmsg)
-          this.setState({errorMessage: errmsg});
+          alert(errmsg);
+          this.setState({ errorMessage: errmsg });
         });
     } catch (error) {
       alert(error.toString(error));
@@ -86,7 +91,10 @@ class Login extends React.Component {
 
   render() {
     return (
-      <ImageBackground source={require('../screens/ingredientsBackground.jpg')} style={styles.imageStyle}>
+      <ImageBackground
+        source={require('../screens/ingredientsBackground.jpg')}
+        style={styles.imageStyle}
+      >
         <Text style={styles.loginHeader}>Login or Sign-up with Your Email</Text>
         <View style={styles.container}>
           <TextInput
@@ -104,24 +112,26 @@ class Login extends React.Component {
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
-  
+
           <Button
-            rounded success
-            style={styles.button} 
-            onPress={() => this.handleLogin()} 
-          > 
+            rounded
+            success
+            style={styles.button}
+            onPress={() => this.handleLogin()}
+          >
             <Text style={styles.buttonText}>Login</Text>
           </Button>
 
           <Button
-            rounded info
-            style={styles.button} 
+            rounded
+            info
+            style={styles.button}
             onPress={() => this.handleSignUp()}
-          > 
+          >
             <Text style={styles.buttonText}>Sign Up</Text>
           </Button>
         </View>
-    </ImageBackground>
+      </ImageBackground>
     );
   }
 }
@@ -156,8 +166,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F2C04C',
     fontSize: 18,
-    textAlignVertical: "center",
-    textAlign: "center",
+    textAlignVertical: 'center',
+    textAlign: 'center',
   },
   textInput: {
     backgroundColor: 'white',
@@ -166,7 +176,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 8,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   button: {
     width: 125,
@@ -178,7 +188,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: '#F2C04C'
+    color: '#F2C04C',
   },
 });
 

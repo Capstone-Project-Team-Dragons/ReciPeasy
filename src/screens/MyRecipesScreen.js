@@ -3,13 +3,16 @@ import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
+
+import { getCurrentUser } from '../store/usersReducer';
 import {
-  getCurrentUser,
   getPastRecipesFromStore,
   getPastRecipesThunk,
+} from '../store/pastRecipesReducer';
+import {
   getWishListFromStore,
   getWishListThunk,
-} from '../store/actionCreators';
+} from '../store/wishListReducer';
 import RecipeList from '../components/RecipeList';
 
 class MyRecipesScreen extends React.PureComponent {
@@ -38,8 +41,8 @@ class MyRecipesScreen extends React.PureComponent {
 
       //If both, pastRecipes and wishlist, are empty,
       if (
-        JSON.stringify(pastRecipes) === JSON.stringify({}) &&
-        JSON.stringify(wishList) === JSON.stringify({})
+        JSON.stringify(pastRecipes) === JSON.stringify([]) &&
+        JSON.stringify(wishList) === JSON.stringify([])
       ) {
         // That means the data is still loading
         isLoading === true;
@@ -54,14 +57,14 @@ class MyRecipesScreen extends React.PureComponent {
       }
 
       // For past recipes, check if data has more than just 'recipe0' doc
-      if (Object.keys(pastRecipes).length > 1) {
+      if (pastRecipes.length > 1) {
         doPastRecipesExists = true;
       } else {
         doPastRecipesExists = false;
       }
 
       // For wish list, check if data has more than just 'recipe0' doc
-      if (Object.keys(wishList).length > 1) {
+      if (wishList.length > 1) {
         doWishListExists = true;
       } else {
         doWishListExists = false;
@@ -122,26 +125,26 @@ class MyRecipesScreen extends React.PureComponent {
           <View>
             <Text style={styles.listTitle}>Your Past Recipes</Text>
             <ScrollView>
-              <RecipeList allRecipes={Object.values(pastRecipes)} />
+              <RecipeList allRecipes={pastRecipes} />
             </ScrollView>
 
             <Text style={styles.listTitle}>Your Wish List</Text>
             <ScrollView>
-              <RecipeList allRecipes={Object.values(wishList)} />
+              <RecipeList allRecipes={wishList} />
             </ScrollView>
           </View>
         ) : displayFlags.doPastRecipesExists === true ? (
           <View>
             <Text style={styles.listTitle}>Your Past Recipes</Text>
             <ScrollView>
-              <RecipeList allRecipes={Object.values(pastRecipes)} />
+              <RecipeList allRecipes={pastRecipes} />
             </ScrollView>
           </View>
         ) : displayFlags.doWishListExists === true ? (
           <View>
             <Text style={styles.listTitle}>Your Wish List</Text>
             <ScrollView>
-              <RecipeList allRecipes={Object.values(wishList)} />
+              <RecipeList allRecipes={wishList} />
             </ScrollView>
           </View>
         ) : null}
