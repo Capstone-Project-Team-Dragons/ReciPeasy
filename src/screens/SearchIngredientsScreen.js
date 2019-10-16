@@ -54,7 +54,6 @@ const SearchIngredientsScreen = ({ navigation }) => {
 
    // If user scanned barcode of a product, add the product name to "Ingredients List" (Array)
   const barcodeHandler = (barcodeProductName) => {
-    console.log('barCodeProdhsufi', barcodeProductName);
     if (barcodeProductName && !ingredients.includes(barcodeProductName.toLowerCase())) {
       setDataFromBarcode(barcodeProductName);
       submitHandler(barcodeProductName);
