@@ -177,7 +177,7 @@ class SingleRecipeScreen extends React.Component {
 
         <FlatList
           data={recipe.missedIngredients}
-          keyExtractor={(item, index) => 'key6' + index}
+          keyExtractor={(item, index) => 'key12' + index}
           renderItem={({ item, index }) => {
             return (
               <View style={styles.container}>

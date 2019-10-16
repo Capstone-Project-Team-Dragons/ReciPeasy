@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-
 import { ScrollView } from 'react-native-gesture-handler';
+import { Button } from 'native-base';
 import { connect } from 'react-redux';
 
 import { getCurrentUser } from '../store/usersReducer';
@@ -13,7 +13,10 @@ import {
   getWishListFromStore,
   getWishListThunk,
 } from '../store/wishListReducer';
-import RecipeList from '../components/RecipeList';
+
+import UserPastRecipesList from '../components/UserPastRecipesList';
+import UserWishList from '../components/UserWishList';
+
 
 class MyRecipesScreen extends React.PureComponent {
   constructor(props) {
@@ -100,53 +103,59 @@ class MyRecipesScreen extends React.PureComponent {
       <View style={styles.container}>
         {displayFlags.isLoggedIn === false ? (
           <View>
-            <Text style={styles.messageLine1}>To View your Recipes,</Text>
-            <Text style={styles.messageLine2}>please Login or Sign-Up</Text>
+            <Text style={styles.messageLine1}>To Access the My Recipes Feature:</Text>
+            <Text style={styles.messageLine2}>Please Login or Sign-Up!</Text>
 
-            <TouchableOpacity
-              horizontal={true}
+            <Button
+              rounded dark
               style={styles.loginButton}
               onPress={() => this.props.navigation.navigate('Login')}
             >
               <Text style={styles.loginButtonText}>Login or Sign-Up</Text>
-            </TouchableOpacity>
+            </Button>
           </View>
+        
         ) : displayFlags.isLoading === true ? (
           <View>
             <Text style={styles.messageLine2}>Loading...</Text>
           </View>
+        
         ) : displayFlags.doMyRecipesExist === false ? (
           <View>
             <Text style={styles.messageLine1}>No Recipes to Show!</Text>
             <Text style={styles.messageLine2}>Please Add Recipes</Text>
           </View>
+        
         ) : displayFlags.doPastRecipesExists === true &&
           displayFlags.doWishListExists === true ? (
           <View>
             <Text style={styles.listTitle}>Your Past Recipes</Text>
             <ScrollView>
-              <RecipeList allRecipes={pastRecipes} />
+              <UserPastRecipesList allRecipes={pastRecipes} />
             </ScrollView>
 
             <Text style={styles.listTitle}>Your Wish List</Text>
             <ScrollView>
-              <RecipeList allRecipes={wishList} />
+              <UserWishList allRecipes={wishList} />
             </ScrollView>
           </View>
+        
         ) : displayFlags.doPastRecipesExists === true ? (
           <View>
             <Text style={styles.listTitle}>Your Past Recipes</Text>
             <ScrollView>
-              <RecipeList allRecipes={pastRecipes} />
+              <UserPastRecipesList allRecipes={pastRecipes} />
             </ScrollView>
           </View>
+        
         ) : displayFlags.doWishListExists === true ? (
           <View>
             <Text style={styles.listTitle}>Your Wish List</Text>
             <ScrollView>
-              <RecipeList allRecipes={wishList} />
+              <UserWishList allRecipes={wishList} />
             </ScrollView>
           </View>
+
         ) : null}
       </View>
     );
@@ -179,10 +188,11 @@ const styles = StyleSheet.create({
   },
   messageLine1: {
     marginTop: 15,
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlignVertical: 'center',
     textAlign: 'center',
+    textDecorationLine: 'underline'
   },
   messageLine2: {
     marginTop: 15,
@@ -190,9 +200,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlignVertical: 'center',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   loginButton: {
-    backgroundColor: '#66ccff',
     height: 40,
     borderRadius: 5,
     marginHorizontal: 50,
@@ -204,6 +214,8 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     fontSize: 18,
+    color: '#F2C04C',
+    fontWeight: 'bold',
   },
   listTitle: {
     marginTop: 15,

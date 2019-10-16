@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Button, Toast } from 'native-base';
 import SearchBar from '../components/SearchBar';
 import spoonacular from '../api/spoonacular';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { SPOON_API } from 'react-native-dotenv';
 import RecipeList from '../components/RecipeList';
 import { EvilIcons } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
   const [currIngredient, setCurrIngredient] = useState('');
   const [recipes, setRecipes] = useState([]);
   const [enableSearch, setEnableSearch] = useState(false);
+  const [dataFromBarcode, setDataFromBarcode] = useState('');
 
   // Search Spoonacular API to retrieve the "Recipes List" (Array).
   const searchRecipesApi = async ingreds => {
@@ -50,6 +51,15 @@ const SearchIngredientsScreen = ({ navigation }) => {
     return formatted;
   };
 
+   // If user scanned barcode of a product, add the product name to "Ingredients List" (Array)
+  const barcodeHandler = (barcodeProductName) => {
+    console.log('barCodeProdhsufi', barcodeProductName);
+    if (barcodeProductName && !ingredients.includes(barcodeProductName.toLowerCase())) {
+      setDataFromBarcode(barcodeProductName);
+      submitHandler(barcodeProductName);
+    }
+  }
+
   // A handler when an ingredient is submitted by user, either manually or by scanning barcode.
   const submitHandler = cIngredient => {
     let currItem;
@@ -62,6 +72,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
         } else {
           setIngredients([...ingredients, currItem]);
           setCurrIngredient('');
+          setDataFromBarcode('');
         }
       }
     } else {
@@ -73,18 +84,6 @@ const SearchIngredientsScreen = ({ navigation }) => {
       });
     }
   };
-
-  // If user scanned barcode of a product, add the product name to "Ingredients List" (Array).
-  let dataFromBarcode = navigation.getParam('ingredientName');
-
-  if (dataFromBarcode !== null) {
-    if (
-      dataFromBarcode &&
-      !ingredients.includes(dataFromBarcode.toLowerCase())
-    ) {
-      submitHandler(dataFromBarcode);
-    }
-  }
 
   // A handler when user wants to remove an ingredient from the "Ingredients List" (Array).
   const removeIngredient = cIngredient => {
@@ -108,7 +107,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
     if (ingredients.length > 0) {
       setEnableSearch(true);
     }
-  }, [ingredients]);
+  }, [ingredients, dataFromBarcode]);
 
   return (
     <View>
@@ -124,7 +123,7 @@ const SearchIngredientsScreen = ({ navigation }) => {
         small
         primary
         style={styles.barcodeButton}
-        onPress={() => navigation.navigate('BarcodeScanner')}
+        onPress={() => navigation.navigate('BarcodeScanner', {handleBarcode: (productName) => {barcodeHandler(productName)}})}
       >
         <Text style={styles.barcodeText}>Scan Ingredient's Barcode</Text>
       </Button>
@@ -181,30 +180,20 @@ const SearchIngredientsScreen = ({ navigation }) => {
           </Button>
         )}
 
-        {recipes.length > 0 ? (
-          <View>
-            <Button
-              rounded
-              danger
-              style={styles.clearSearchResultsButton}
-              onPress={() => clearSearchResults()}
-            >
-              <Text style={styles.clearSearchResultsButtonText}>
-                Clear Search Results
-              </Text>
-            </Button>
-
-            {/* <TouchableOpacity
-                horizontal={true}
+        {recipes.length > 0 ? 
+          (
+            <View>
+              <Button
+                rounded danger
                 style={styles.clearSearchResultsButton}
                 onPress={() => clearSearchResults()}
               >
-                <Text style={styles.clearSearchResultsButtonText}>
-                  Clear Search Results
-                </Text>
-              </TouchableOpacity> */}
-          </View>
-        ) : null}
+                <Text style={styles.clearSearchResultsButtonText}>Clear Search Results</Text>
+              </Button>
+            </View>
+          ) : null 
+        }
+
       </View>
 
       <View>
