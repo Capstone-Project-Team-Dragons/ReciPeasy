@@ -1,4 +1,3 @@
-
 const data = [
     {
         "id": 21198,
@@ -560,5 +559,3 @@ const data = [
         "likes": 39
     }
 ]
-
-export default data;

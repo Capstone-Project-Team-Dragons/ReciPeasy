@@ -73,9 +73,10 @@ let Navigation = createAppContainer(
       tabBarOptions: {
         activeBackgroundColor: '#304b5a',
         labelStyle: {
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: 'bold',
           color: '#F2C04C',
+          marginBottom: 15
         },
         style: {
           backgroundColor: '#141414',

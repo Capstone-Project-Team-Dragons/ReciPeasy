@@ -10,6 +10,8 @@ const styles = StyleSheet.create({
       fontSize: 16,
       marginLeft: 10,
       marginTop: 10,
+      marginBottom: 5,
+      textDecorationLine: 'underline'
     },
     displayList: {
       marginTop: 5,
@@ -30,8 +32,12 @@ const styles = StyleSheet.create({
       textAlign: 'center',
     },
     recipeIngredientName: {
-      fontSize: 14,
-      marginLeft: 20,
+      fontSize: 16,
+      marginLeft: 15,
+    },
+    remainingIngredient: {
+      fontSize: 16,
+      marginLeft: 10
     },
     button: {
       height: 30,

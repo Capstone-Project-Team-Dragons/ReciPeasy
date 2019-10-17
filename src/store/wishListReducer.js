@@ -118,7 +118,17 @@ function wishListReducer(state = { wishList: [] }, action) {
         title: action.recipeTitle,
         image: action.recipeImage,
       };
-      return { ...state, wishList: [...state.wishList, recipeObj] };
+      let recipeArr = state.wishList.filter(
+        elemObj => elemObj.id === action.recipeId
+      );
+      // Add the recipe from action, only if it was absent in the state.
+      if (recipeArr.length === 0) {
+        return { ...state, wishList: [...state.wishList, recipeObj] };
+      }
+      // Do not add to the state, if recipe was already present.
+      else if (recipeArr.length === 1) {
+        return state;
+      }
     case REMOVE_FROM_WISHLIST:
       return {
         ...state,

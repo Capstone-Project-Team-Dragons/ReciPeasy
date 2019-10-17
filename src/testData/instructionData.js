@@ -296,62 +296,7 @@ const data = [
     }
 ]
 
-// const data2 =  [
-//     {
-//       "name": "",
-//       "steps": [
-//         {
-//           "equipment": [
-//             {
-//               "id": 404645,
-//               "image": "pan.png",
-//               "name": "frying pan",
-//             },
-//           ],
-//           "ingredients": Array [
-//             Object {
-//               "id": 1001,
-//               "image": "butter-sliced.jpg",
-//               "name": "butter",
-//             },
-//             Object {
-//               "id": 1053,
-//               "image": "fluid-cream.jpg",
-//               "name": "cream",
-//             },
-//           ],
-//           "number": 1,
-//           "step": "Melt butter in a heavy bottomed deep skillet over medium heat. Once butter is completely melted reduce heat to medium low and immediately pour in cream. Pan may sizzle, but as you stir it will subside.",
-//         },
-//         Object {
-//           "equipment": Array [
-//             Object {
-//               "id": 404661,
-//               "image": "whisk.png",
-//               "name": "whisk",
-//             },
-//           ],
-//           "ingredients": Array [
-//             Object {
-//               "id": 2047,
-//               "image": "salt.jpg",
-//               "name": "salt",
-//             },
-//           ],
-//           "number": 2,
-//           "step": "Whisk in cheese and continue stirring until cheese is completely melted and sauce is smooth. Taste and add in salt and lots of pepper, as desired.",
-//         },
-//         Object {
-//           "equipment": Array [],
-//           "ingredients": Array [],
-//           "number": 3,
-//           "step": "Use sauce immediately by tossing with hot pasta and serving right away. If it sits, the sauce tends to thicken up, so add in a splash of pasta water to keep things loose.",
-//         },
-//       ],
-//     },
-//   ];
 
 
 
-
-export default data;
+//export default data;
