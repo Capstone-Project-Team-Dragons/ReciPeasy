@@ -1,5 +1,4 @@
 import React from "react";
-import Enzyme, { shallow, mount } from "enzyme";
 import Login from '../screens/LoginScreen';
 
  
