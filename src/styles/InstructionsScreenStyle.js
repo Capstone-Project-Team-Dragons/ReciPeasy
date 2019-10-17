@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         marginLeft: 5
     },
     textTitle: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: "bold",
         margin: 5
     },
@@ -16,10 +16,11 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderRadius: 5,
         borderWidth: 1,
-        padding: 5
+        padding: 5,
+        marginBottom: 5
     },
     textAddtional: {
-        fontSize: 12,
+        fontSize: 16,
         fontWeight: "bold"
     }
 });

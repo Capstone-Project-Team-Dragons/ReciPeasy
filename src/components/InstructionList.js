@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, FlatList } from 'react-native';
+import {View, ScrollView, Text, FlatList } from 'react-native';
 import styles from '../styles/InstructionListStyle';
 
 const InstructionList = ({allInstructions}) => {
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <FlatList
                 data={allInstructions["steps"]}
                 keyExtractor={(item, index) => 'key3'+index}
@@ -18,7 +18,7 @@ const InstructionList = ({allInstructions}) => {
                     );
                 }} 
             />
-        </View>
+        </ScrollView>
     )
 }
 

@@ -2,14 +2,16 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 10
+        marginLeft: 5,
+        marginRight: 5,
+        maxHeight: 550
     },
     text: {
-        fontSize: 14,
+        fontSize: 16,
         margin: 5
     },
     label: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
         textDecorationLine: 'underline'
     }

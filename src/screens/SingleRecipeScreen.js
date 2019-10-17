@@ -12,6 +12,9 @@ import { connect } from 'react-redux';
 
 import styles from '../styles/SingleRecipeStyle';
 
+import FullIngredientsList from '../components/FullIngredientsList';
+import UsedIngredientsFromList from '../components/UsedIngredientsFromList'
+
 import { getCurrentUser } from '../store/usersReducer';
 import { addToPastRecipesThunk } from '../store/pastRecipesReducer';
 import {
@@ -27,6 +30,7 @@ class SingleRecipeScreen extends React.Component {
     super(props);
     this.state = {
       additionalInfo: [],
+      extendedIngredients: [],
       prepTime: 0,
       servings: 0
     }
@@ -44,13 +48,27 @@ class SingleRecipeScreen extends React.Component {
     try {
       const additionalInfoData = await spoonacular.get(url);
 
-      if(additionalInfoData && additionalInfoData.data["analyzedInstructions"].length > 0) {
-        this.setState({
-          prepTime: additionalInfoData.data["readyInMinutes"],
-          servings: additionalInfoData.data["servings"],
-          additionalInfo: additionalInfoData.data["analyzedInstructions"]
-        })
-      } 
+      if(additionalInfoData) {
+        if(additionalInfoData.data["analyzedInstructions"].length >= 1 && additionalInfoData.data["extendedIngredients"].length >= 1) {
+          this.setState({
+            prepTime: additionalInfoData.data["readyInMinutes"],
+            servings: additionalInfoData.data["servings"],
+            additionalInfo: additionalInfoData.data["analyzedInstructions"],
+            extendedIngredients: additionalInfoData.data["extendedIngredients"]
+          })
+        } else if(additionalInfoData.data["analyzedInstructions"].length >= 1 && additionalInfoData.data["extendedIngredients"].length < 1) {
+          this.setState({
+            prepTime: additionalInfoData.data["readyInMinutes"],
+            servings: additionalInfoData.data["servings"],
+            additionalInfo: additionalInfoData.data["analyzedInstructions"],
+          })
+        } else if(additionalInfoData.data["analyzedInstructions"].length < 1 && additionalInfoData.data["extendedIngredients"].length >= 1) {
+          this.setState({
+            extendedIngredients: additionalInfoData.data["extendedIngredients"]
+          })
+        }
+      }
+
     } catch (error) {
       console.log('Error', error)
     }
@@ -85,7 +103,7 @@ class SingleRecipeScreen extends React.Component {
   ) => {
     try {
       if (isRecipeInWishList === true) {
-        // alreay exists
+        // already exists
         Toast.show({
           text: `${title} already exists in your Wish List!`,
           buttonText: 'Okay',
@@ -146,6 +164,14 @@ class SingleRecipeScreen extends React.Component {
     return { isLoggedIn, isRecipeInWishList };
   }
 
+  doUsedIngredientsExist(recipe) {
+    if(recipe.usedIngredientCount && recipe.usedIngredientCount > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   formatIngredientName = ingredient => {
     let formatted = ingredient[0].toUpperCase() + ingredient.slice(1);
     return formatted;
@@ -175,73 +201,16 @@ class SingleRecipeScreen extends React.Component {
         </Text>
         <Image style={styles.imageStyle} source={{ uri: recipe.image }} />
 
-        <Text style={styles.recipeName}>
-          Total Used Ingredient(s) from Your List: {recipe.usedIngredientCount}{' '}
-        </Text>
+        {
+          this.doUsedIngredientsExist(recipe) === true ? 
+            (
+              <UsedIngredientsFromList recipe={recipe}/>
+            ) : null
+        }
 
-        <FlatList
-          data={recipe.usedIngredients}
-          keyExtractor={(item, index) => 'key' + index}
-          renderItem={({ item, index }) => {
-            return (
-              <View style={styles.container}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ fontWeight: 'bold', fontSize: 15 }}>
-                    {index + 1}. {this.formatIngredientName(item.name)}
-                  </Text>
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      textDecorationLine: 'underline',
-                      fontSize: 14,
-                      marginLeft: 15,
-                    }}
-                  >
-                    More Information:
-                  </Text>
-                  <Text style={styles.recipeIngredientName}>
-                    {item.originalString}
-                  </Text>
-                </View>
-              </View>
-            );
-          }}
-        />
+        <Text style={styles.recipeName}>Full Ingredient List:</Text>
 
-        <Text style={styles.recipeName}>
-          Remaining Ingredient(s) You Will Need: {recipe.missedIngredientCount}{' '}
-        </Text>
-
-        <FlatList
-          data={recipe.missedIngredients}
-          keyExtractor={(item, index) => 'key12' + index}
-          renderItem={({ item, index }) => {
-            return (
-              <View style={styles.container}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ fontWeight: 'bold', fontSize: 15 }}>
-                    {index + 1}. {this.formatIngredientName(item.name)}
-                  </Text>
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      textDecorationLine: 'underline',
-                      fontSize: 14,
-                      marginLeft: 15,
-                    }}
-                  >
-                    More Information:
-                  </Text>
-                  <Text style={styles.recipeIngredientName}>
-                    {item.originalString}
-                  </Text>
-                </View>
-              </View>
-            );
-          }}
-        />
+        <FullIngredientsList extendedIngredients={this.state.extendedIngredients}/>
 
         {displayFlags.isLoggedIn === false ? null : (
           <View>
