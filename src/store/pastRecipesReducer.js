@@ -97,9 +97,12 @@ function pastRecipesReducer(state = { pastRecipes: [] }, action) {
       let recipeArr = state.pastRecipes.filter(
         elemObj => elemObj.id === action.recipeId
       );
+      // Add the recipe from action, only if it was absent in the state.
       if (recipeArr.length === 0) {
         return { ...state, pastRecipes: [...state.pastRecipes, recipeObj] };
-      } else if (recipeArr.length === 1) {
+      }
+      // Do not add to the state, if recipe was already present.
+      else if (recipeArr.length === 1) {
         return state;
       }
     default:
