@@ -35,6 +35,10 @@ const styles = StyleSheet.create({
       fontSize: 16,
       marginLeft: 15,
     },
+    remainingIngredient: {
+      fontSize: 16,
+      marginLeft: 10
+    },
     button: {
       height: 30,
       borderRadius: 5,

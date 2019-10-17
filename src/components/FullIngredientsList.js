@@ -6,7 +6,7 @@ import {
   } from 'react-native';
   import styles from '../styles/SingleRecipeStyle';
 
-  const AllIngredientsList = ({ extendedIngredients }) => {
+  const FullIngredientsList = ({ extendedIngredients }) => {
       return (
           <View>
               <FlatList
@@ -15,8 +15,8 @@ import {
                 renderItem={({ item, index }) => {
                     return (
                     <View style={styles.container}>
-                        <Text style={styles.recipeIngredientName}>
-                            {item["originalString"]}
+                        <Text style={styles.remainingIngredient}>
+                            -{item["originalString"]}
                         </Text>
                     </View>
                     );
@@ -26,4 +26,4 @@ import {
       )
   }
 
-  export default AllIngredientsList
+  export default FullIngredientsList
