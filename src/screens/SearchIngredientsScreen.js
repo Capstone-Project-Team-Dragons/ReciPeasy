@@ -9,9 +9,6 @@ import RecipeList from '../components/RecipeList';
 import { EvilIcons } from '@expo/vector-icons';
 import styles from '../styles/SearchIngredientsStyle';
 
-// Recipes Data for testing purpose, saved in json format inside the data.js file.
-//import data from '../testData/recipeData';
-
 const SearchIngredientsScreen = ({ navigation }) => {
   const [ingredients, setIngredients] = useState([]);
   const [currIngredient, setCurrIngredient] = useState('');

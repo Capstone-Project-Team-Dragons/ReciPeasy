@@ -1,6 +1,6 @@
 import React from 'react';
 import * as firebase from 'firebase';
-import { StyleSheet, Text, TextInput, View, ImageBackground } from 'react-native';
+import { Text, TextInput, View, ImageBackground } from 'react-native';
 import styles from '../styles/LoginScreenStyles'
 import { Button } from 'native-base';
 
@@ -87,7 +87,7 @@ class Login extends React.Component {
   render() {
     return (
       <ImageBackground
-        source={require('../screens/ingredientsBackground.jpg')}
+        source={require('../../assets/ingredientsBackground.jpg')}
         style={styles.imageStyle}
       >
         <Text style={styles.loginHeader}>Login or Sign-up with Your Email</Text>

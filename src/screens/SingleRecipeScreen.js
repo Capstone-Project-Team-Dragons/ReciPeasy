@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   Text,
-  FlatList,
   Image,
 } from 'react-native';
 import { Toast, Button } from 'native-base';
