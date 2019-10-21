@@ -12,7 +12,10 @@ Inspired by our love for food and to spend money accordingly, we developed ingre
 Guests can easily search for recipes they can prepare with the ingredients that are available to them. They can either type in the ingredient or scan its barcode. The app will then render a list of recipes the user can whip up. If they select a recipe, they can view more information about that specific recipe, such as the preparation time, number of servings and the detailed steps.
  
 #### Signed-up Users :
+
 The users that have signed-up to use ingredia can log-in to their accounts. These users have access to all the features that guests have, in addition to the “My Recipes” tab. The "My Recipes" feature stores the user's “Past Recipes”, which contain the history of recipes made by that user, along with their “Wish List”. The "Wish List" is a collection of recipes saved by the user for future reference, or a recipe to prepare another time. 
+
+#### Highlighted Features : 
 
 Type/Scan Ingredients to Find Tasty Recipes          |    "My Recipes" Feature for Logged-In Users
 :-------------------------:|:-------------------------:
