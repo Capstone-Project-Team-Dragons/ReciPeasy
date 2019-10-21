@@ -14,9 +14,10 @@ Guests can easily search for recipes they can prepare with the ingredients that 
 #### Signed-up Users :
 The users that have signed-up to use ingredia can log-in to their accounts. These users have access to all the features that guests have, in addition to the “My Recipes” tab. The "My Recipes" feature stores the user's “Past Recipes”, which contain the history of recipes made by that user, along with their “Wish List”. The "Wish List" is a collection of recipes saved by the user for future reference, or a recipe to prepare another time. 
 
-![Search Ingredients](assets/searchIngredientsGiphy.gif)
+Type/Scan Ingredients to Find Tasty Recipes          |    "My Recipes" Feature for Logged-In Users
+:-------------------------:|:-------------------------:
+<img src="assets/searchIngredientsGiphy.gif">  |   <img src="assets/ingrediaMyRecipes.gif">
 
-![My Recipes Tab](assets/ingrediaMyRecipes.gif)
 
 ## Architecture
 
