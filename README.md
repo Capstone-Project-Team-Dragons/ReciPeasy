@@ -1,9 +1,10 @@
 # ingredia 
+#### Created by: Nayana Limaye, Gundeep Kohli and Kate Lei
 
 ## Overview
 Inspired by our love for food and to spend money accordingly, we developed ingredia! It is a mobile application that we created with the intent of utilizing ingredients in your household that may otherwise go to waste. You know the ingredients you have sitting in your pantry or refrigerator that are probably going bad? Ingredia can help you with that! With its help, you can prepare some tasty recipes, and avoid feeling the guilt of throwing food away!
 
-//IMAGE
+<img src="assets/ingrediaOpeningImage.jpeg" width="25%" height="50%">
 
 ## User Experience
 
@@ -13,7 +14,7 @@ Guests can easily search for recipes they can prepare with the ingredients that 
 #### Signed-up Users :
 The users that have signed-up to use ingredia can log-in to their accounts. These users have access to all the features that guests have, in addition to the “My Recipes” tab. The "My Recipes" feature stores the user's “Past Recipes”, which contain the history of recipes made by that user, along with their “Wish List”. The "Wish List" is a collection of recipes saved by the user for future reference, or a recipe to prepare another time. 
 
-//GIF
+![Farmers Market Finder Demo](assets/giphy.gif)
 
 ## Architecture
 
@@ -23,4 +24,4 @@ Instead of using a traditional RDBMS, we opted to use a NoSQL database. Cloud Fi
 
 We retrieved data from external APIs for the recipes, and ingredient information associated with a scanned barcode.
 
-//IMAGE
+<img src="assets/techStack.png" width="60%" height="60%">
